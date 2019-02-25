@@ -1,0 +1,5 @@
+# Nginx log file
+web-vulndb/log/*.log
+
+# Templates stored in database
+web-vulndb/data/vulndb.json
