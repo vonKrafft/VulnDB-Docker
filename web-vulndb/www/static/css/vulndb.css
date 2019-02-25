@@ -1,0 +1,150 @@
+/*
+Copyright (c) 2019 vonKrafft <contact@vonkrafft.fr>
+
+This file is part of VulnDB.
+
+This file may be used under the terms of the GNU General Public License
+version 3.0 as published by the Free Software Foundation and appearing in
+the file LICENSE included in the packaging of this file. Please review the
+following information to ensure the GNU General Public License version 3.0
+requirements will be met: http://www.gnu.org/copyleft/gpl.html.
+
+This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
+body {
+    font-size: .75rem;
+}
+* {
+    border-radius: 0px !important;
+}
+p mark, h5 mark {
+    padding: 0;
+}
+#search-eraser {
+    display: none;
+    line-height: 1.5;
+    padding: .375rem .75rem;
+    position: absolute;
+    right: 10px;
+    text-align: right;
+    width: auto;
+}
+#search-eraser:hover {
+    cursor: pointer;
+    opacity: .75;
+}
+.pre-wrap {
+    margin-bottom: .5rem;
+}
+.pre-wrap p {
+    margin-bottom: 0;
+    font-size: .9em;
+}
+.pre-wrap ul {
+    margin-bottom: 0;
+}
+.pre-wrap ul > li {
+    font-size: .9em;
+    list-style: square;
+}
+.pre-wrap em {
+    color: #17a2b8;
+}
+.modal-body .form-control {
+    font-size: inherit;
+}
+.modal-body .col-form-label {
+    font-size: 1rem;
+    font-weight: 600;
+}
+.modal-body .form-label {
+    font-weight: 600;
+}
+.form-check-inline {
+    height: calc(2.25rem + 2px);
+}
+#item-pool .card-title > h5 > .btn {
+    font-size: .5em;
+    padding: .2em .35em .2em;
+    line-height: .9em;
+    text-transform: uppercase;
+}
+#item-pool .btn-copy {
+    margin-bottom: .5rem;
+    display: none;
+    cursor: pointer;
+}
+#item-pool .card-text {
+    text-align: justify;
+    padding-left: 2.5rem;
+    margin-left: -1.25rem
+}
+#item-pool .card-text:hover > .btn-copy {
+    display: flex;
+    align-items: center;
+    left: 1.33333em;
+    justify-content: center;
+    z-index: 2;
+}
+#menu {
+    padding-right: 0;
+}
+#menu > .nav {
+    display: block;
+    border: 1px solid rgba(0,0,0,.125);
+    padding: 1rem 0;
+    position: sticky;
+    top: 71px;
+    overflow: auto;
+    max-height: calc(100vh - 150px);
+    max-width: 100%;
+}
+#menu .nav-item {
+    max-width: 100%;
+}
+#menu .nav-link {
+    padding: .5rem 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#menu a.nav-link {
+    color: inherit;
+    opacity: .8;
+}
+#menu a.nav-link.active {
+    color: #007bff;
+}
+#menu a.nav-link:hover {
+    opacity: 1;
+}
+#menu li > ul {
+    padding-left: 1em;
+    margin-top: -.5em;
+}
+#menu li > ul .nav-link {
+    padding: .125rem 1rem;
+}
+.histogram > dl > dd {
+  border-bottom: solid 1px;
+}
+.histogram > dl:first-child {
+  border-left: solid 1px;
+}
+.histogram > dl > dd > .bar {
+    display: block;
+    overflow: hidden;
+    color: #fff;
+    padding: 0 15px;
+    margin: auto 15px;
+    line-height: 0;
+    font-size: 8px;
+}
+.histogram > dl > dd > .bar-fr {
+    background-color: #17a2b8;
+}
+.histogram > dl > dd > .bar-en {
+    background-color: #6c757d;
+}
