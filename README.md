@@ -30,10 +30,10 @@ $ docker-compose up -d
 
 **Web interface**
 
-- Bootstrap v4.1.3 (https://getbootstrap.com/)
-- Font Awesome Free 5.3.1 by @fontawesome (https://fontawesome.com)
+- Bootstrap v4.3.1 (https://getbootstrap.com/)
+- Font Awesome Free v5.7.2 (https://fontawesome.com)
 - jQuery v3.3.1 (https://jquery.org/)
-- Popper v1.14.3 (https://popper.js.org/)
+- Popper v1.14.7 (https://popper.js.org/)
 - showdown v1.8.6 (https://github.com/showdownjs/showdown)
 
 ## License
