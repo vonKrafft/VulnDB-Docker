@@ -1,12 +1,17 @@
 # VulnDB Docker
 
-**VulnDB** is a simple PHP application to manage templates for pentest reports.
+**VulnDB** is a simple PHP/JavaScript application to manage templates for pentest reports.
 
 ![Web interface of VulnDB](https://raw.githubusercontent.com/vonKrafft/VulnDB-Docker/master/preview.png)
 
-Create templates with a title, an OWASP category and a description with consequences and recommendations, and copy it when you have to in your pentest report.
+Create templates with a title, an OWASP category and a description with consequences and recommendations, and copy it when you have to in your pentest report:
 
-Data are stored in a single JSON file. You can export it when you want through the Web interface.
+- By design, **VulnDB** allow to create templates written in English and French.
+- The templates are organized by OWASP category and sorted alphabetically.
+- If the title of the template matches the OWASP label, it will be displayed first in the list and highlighted in light blue.
+- A search form is used to dynamically filter the list of templates displayed on the page.
+- The URL is automatically rewritten to share searches or a link to a particular template.
+- Data are stored in a single JSON file. You can export it when you want through the Web interface.
 
 This **VulnDB** repository is design to work with [Docker](https://www.docker.com/), but you can also host it on your server using the configuration file `nginx.conf` to help you.
 
@@ -30,6 +35,8 @@ $ docker-compose up -d
 
 **Web interface**
 
+- Backbone.js v1.4.0 (http://backbonejs.org)
+- Underscore.js v1.9.1 (http://underscorejs.org)
 - Bootstrap v4.3.1 (https://getbootstrap.com/)
 - Font Awesome Free v5.7.2 (https://fontawesome.com)
 - jQuery v3.3.1 (https://jquery.org/)

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-100">
 <head><!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,291 +16,37 @@
     <!-- Title -->
     <title>VulnDB :: Templates for pentest reports</title>
 </head>
-<body class="pt-4">
+<body class="d-flex flex-column h-100 pt-5">
 
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">VulnDB Docker</a>
-            <div class="collapse navbar-collapse" id="mainnav">
-                <ul class="navbar-nav mr-auto">
-                </ul>
-                <ul class="navbar-nav my-2 my-lg-0">
-                    <li class="nav-item">
-                        <span class="navbar-text">Templates for pentest reports</span>
-                    </li>
-                    <li class="nav-item">
-                        <a href="https://github.com/vonKrafft/VulnDB-Docker" target="_blank" class="nav-link"><i class="fab fa-github"></i></a>
-                    </li>
-                </ul>
+    <header>
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container flex-nowrap">
+                <a class="navbar-brand" href="#">VulnDB Docker</a>
+                <div class="navbar-links">
+                    <ul id="navbar-left" class="navbar-nav mr-auto my-0"></ul>
+                    <ul id="navbar-right" class="navbar-nav my-0"></ul>
+                </div>
+            </div>
+        </nav>
+        <button class="d-none btn btn-light btn-scroll fixed-bottom m-3"><i class="fa fa-arrow-up"></i></button>
+    </header>
+
+    <main class="flex-shrink-0">
+        <div id="content" class="container">
+            <div class="d-flex flex-column align-items-center my-5 py-5">
+                <i class="fas fa-circle-notch fa-spin fa-5x"></i>
+                <p class="my-3">Loading ...</p>
             </div>
         </div>
-    </nav>
-
-    <button class="btn btn-light btn-scroll fixed-bottom m-3"><i class="fa fa-arrow-up"></i></button>
-
-    <main class="container mt-5">
-
-        <section class="row my-2">
-
-            <div class="col-auto form-inline">
-                <div class="form-group position-relative">
-                    <label class="sr-only" for="search">Search</label>
-                    <input type="text" class="form-control mb-2 mr-sm-2" id="search" placeholder="Search ...">
-                    <i id="search-eraser" class="fa fa-times form-control-plaintext mb-2 text-muted"></i>
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="language">Language</label>
-                    <select type="text" class="form-control mb-2 mr-sm-2" id="language">
-                        <option value="FR" selected="selected">FR</option>
-                        <option value="EN">EN</option>
-                    </select>
-                </div>
-                <div class="form-group mb-2">
-                    <input type="text" readonly class="form-control-plaintext text-muted" id="stats" value="">
-                </div>
-            </div>
-
-            <div class="col text-right">
-                <a href="/api/_export" type="button" class="btn btn-secondary" data-hover="tooltip" title="Export"><i class="fa fa-file-export"></i></a>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#import" data-hover="tooltip" title="Import"><i class="fa fa-file-import"></i></button>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#owasp-stats" data-hover="tooltip" title="Statistics"><i class="fa fa-chart-bar"></i></button>
-                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#add-item" data-hover="tooltip" title="New"><i class="fa fa-plus-square"></i></button>
-            </div>
-
-        </section>
-
-        <section class="row my-2">
-
-            <div class="col">
-                <div id="notification" class="alert d-none" role="alert"></div>
-            </div>
-
-        </section>
-
-        <section class="row my-2">
-
-            <aside id="menu" class="d-none d-lg-block col-lg-3"></aside>
-
-            <div id="item-pool" class="col col-lg-9"></div>
-
-        </section>
-
-        <div class="modal fade" id="error" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content bg-danger text-light">
-                    <div class="modal-body text-center">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="import" tabindex="-1" role="dialog" aria-labelledby="import-label" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title" id="import-label"><i class="fa fa-file-import"></i> Import JSON</h5>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="form-label" for="json">Paste JSON content:</label>
-                            <textarea class="form-control" name="json" rows="10"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button id="import-btn" type="button" class="btn btn-dark" data-dismiss="modal">Import</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="owasp-stats" tabindex="-1" role="dialog" aria-labelledby="owasp-stats-label" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title" id="owasp-stats-label"><i class="fa fa-chart-bar"></i> Statistics</h5>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <h5></h5>
-                        <div class="histogram d-table text-center m -3">
-                            <dl id="h-A1-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A1-2017</dt>
-                            </dl>
-                            <dl id="h-A2-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A2-2017</dt>
-                            </dl>
-                            <dl id="h-A3-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A3-2017</dt>
-                            </dl>
-                            <dl id="h-A4-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A4-2017</dt>
-                            </dl>
-                            <dl id="h-A5-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A5-2017</dt>
-                            </dl>
-                            <dl id="h-A6-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A6-2017</dt>
-                            </dl>
-                            <dl id="h-A7-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A7-2017</dt>
-                            </dl>
-                            <dl id="h-A8-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A8-2017</dt>
-                            </dl>
-                            <dl id="h-A9-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A9-2017</dt>
-                            </dl>
-                            <dl id="h-A10-2017" class="d-table-cell align-bottom">
-                                <dd><span class="bar bar-fr" data-hover="tooltip">FR</span><span class="bar bar-en" data-hover="tooltip">EN</span></dd>
-                                <dt>A10-2017</dt>
-                            </dl>
-                        </div>
-                        <section></section>
-                    </div>
-                    <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="add-item" tabindex="-1" role="dialog" aria-labelledby="add-item-label" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title" id="add-item-label"><i class="fa fa-plus-square"></i> New template</h5>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="sr-only" for="title">Title</label>
-                            <input type="text" class="form-control mb-2 mr-sm-2" name="title" placeholder="Title">
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="owasp">OWASP</label>
-                            <div class="col-sm-6">
-                                <select class="form-control" name="owasp">
-                                    <option value="" disabled="disabled" selected="selected">-- TOP 10 OWASP 2017</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="language" value="FR" checked="checked">
-                                    <label class="form-check-label" for="language">FR</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="language" value="EN">
-                                    <label class="form-check-label" for="language">EN</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="description">Description</label>
-                            <textarea class="form-control" name="description" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="consequences">Consequences</label>
-                            <textarea class="form-control" name="consequences" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="recommendations">Recommendations</label>
-                            <textarea class="form-control" name="recommendations" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
-                        <button id="add-item-btn" type="button" class="btn btn-dark" data-dismiss="modal">Create</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="edit-item" tabindex="-1" role="dialog" aria-labelledby="edit-item-label" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title" id="edit-item-label"><i class="fa fa-pen-square"></i> Edit template</h5>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="sr-only" for="title">Title</label>
-                            <input type="text" class="form-control mb-2 mr-sm-2" name="title" placeholder="Title">
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label" for="owasp">OWASP</label>
-                            <div class="col-sm-6">
-                                <select class="form-control" name="owasp">
-                                    <option value="" disabled="disabled" selected="selected">-- TOP 10 OWASP 2017</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="language" value="FR">
-                                    <label class="form-check-label" for="language">FR</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="language" value="EN">
-                                    <label class="form-check-label" for="language">EN</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="description">Description</label>
-                            <textarea class="form-control" name="description" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="consequences">Consequences</label>
-                            <textarea class="form-control" name="consequences" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="recommendations">Recommendations</label>
-                            <textarea class="form-control" name="recommendations" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer bg-light">
-                        <div class="form-inline">
-                            <input type="hidden" name="id">
-                            <input type="text" id="delete-item-confirm" class="form-control" placeholder="Type DELETE to confirm">
-                        </div>
-                        <button id="delete-item-btn" type="button" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Discard</button>
-                        <button id="edit-item-btn" type="button" class="btn btn-dark" data-dismiss="modal">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
 
     <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/underscore-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/backbone-1.4.0.min.js"></script>
     <script type="text/javascript" src="/static/js/popper-1.14.7.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-4.3.1.min.js"></script>
     <script type="text/javascript" src="/static/js/showdown-1.8.6.min.js"></script>
     <script type="text/javascript" src="/static/js/vulndb.js"></script>
-
-    <div class="d-none footer footer--dark" align="center">
-        <em>Kraffted</em> with &lt;3
-    </div>
 
 </body>
 </html>

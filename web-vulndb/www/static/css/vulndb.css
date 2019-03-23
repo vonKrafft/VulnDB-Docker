@@ -16,71 +16,105 @@ WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 body {
     font-size: .75rem;
 }
+
 * {
     border-radius: 0px !important;
 }
-p mark, h5 mark {
-    padding: 0;
+
+.modal-body textarea.form-control {
+    font-size: inherit;
 }
+
+.form-check-inline {
+    height: calc(2.25rem + 2px);
+}
+
+.toast {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    width: 20%;
+    max-width: 20%;
+    z-index: 1080;
+}
+
+.mark, mark {
+    padding: 0;
+    background-color: #f6e692;
+}
+
+.bg-dark {
+    background-color: #032343 !important;
+}
+
+.navbar-nav {
+  flex-direction: row;
+}
+
+.navbar-nav .nav-link {
+  padding-right: .5rem;
+  padding-left: .5rem;
+}
+
+.navbar-expand-lg > .container, .navbar-expand-lg > .container-fluid {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+/***********************************************************************
+ * SEARCH
+ ***********************************************************************/
+
+#search-query {
+    padding-right: 32px;
+}
+
 #search-eraser {
-    display: none;
-    line-height: 1.5;
+    line-height: 24px;
     padding: .375rem .75rem;
     position: absolute;
-    right: 10px;
+    right: 28.75%;
     text-align: right;
     width: auto;
+    z-index: 1020;
 }
+
 #search-eraser:hover {
     cursor: pointer;
     opacity: .75;
 }
-.pre-wrap {
-    margin-bottom: .5rem;
+
+#language {
+    flex-grow: .25;
 }
-.pre-wrap p {
-    margin-bottom: 0;
-    font-size: .9em;
+
+#item-counter {
+    margin-top: -.5rem;
 }
-.pre-wrap ul {
-    margin-bottom: 0;
-}
-.pre-wrap ul > li {
-    font-size: .9em;
-    list-style: square;
-}
-.pre-wrap em {
-    color: #17a2b8;
-}
-.modal-body .form-control {
-    font-size: inherit;
-}
-.modal-body .col-form-label {
-    font-size: 1rem;
-    font-weight: 600;
-}
-.modal-body .form-label {
-    font-weight: 600;
-}
-.form-check-inline {
-    height: calc(2.25rem + 2px);
-}
+
+/***********************************************************************
+ * ITEM POOL
+ ***********************************************************************/
+
 #item-pool .card-title > h5 > .btn {
     font-size: .5em;
     padding: .2em .35em .2em;
     line-height: .9em;
     text-transform: uppercase;
 }
+
 #item-pool .btn-copy {
     margin-bottom: .5rem;
     display: none;
     cursor: pointer;
 }
+
 #item-pool .card-text {
     text-align: justify;
     padding-left: 2.5rem;
     margin-left: -1.25rem
 }
+
 #item-pool .card-text:hover > .btn-copy {
     display: flex;
     align-items: center;
@@ -88,9 +122,47 @@ p mark, h5 mark {
     justify-content: center;
     z-index: 2;
 }
-#menu {
-    padding-right: 0;
+
+#item-pool .card-body.bg-secondary {
+    background-color: #c2d0de !important;
 }
+
+#item-pool .pre-wrap {
+    margin-bottom: .5rem;
+}
+
+#item-pool .pre-wrap p {
+    margin-bottom: 0;
+    font-size: .9em;
+}
+
+#item-pool .pre-wrap ul {
+    margin-bottom: 0;
+}
+
+#item-pool .pre-wrap ul > li {
+    font-size: .9em;
+    list-style: square;
+}
+
+#item-pool .pre-wrap em {
+    color: #17a2b8;
+}
+
+/***********************************************************************
+ * MENU
+ ***********************************************************************/
+
+#menu {
+    max-width: 225px;
+}
+
+@media (min-width: 1200px) {
+    #menu {
+        max-width: 270px;
+    }
+}
+
 #menu > .nav {
     display: block;
     border: 1px solid rgba(0,0,0,.125);
@@ -101,39 +173,53 @@ p mark, h5 mark {
     max-height: calc(100vh - 150px);
     max-width: 100%;
 }
+
 #menu .nav-item {
     max-width: 100%;
 }
+
 #menu .nav-link {
     padding: .5rem 1rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 #menu a.nav-link {
     color: inherit;
     opacity: .8;
 }
+
 #menu a.nav-link.active {
     color: #007bff;
 }
+
 #menu a.nav-link:hover {
     opacity: 1;
 }
+
 #menu li > ul {
     padding-left: 1em;
     margin-top: -.5em;
 }
+
 #menu li > ul .nav-link {
     padding: .125rem 1rem;
 }
-.histogram > dl > dd {
+
+/***********************************************************************
+ * STATS
+ ***********************************************************************/
+
+#stats .histogram > dl > dd {
   border-bottom: solid 1px;
 }
-.histogram > dl:first-child {
+
+#stats .histogram > dl:first-child {
   border-left: solid 1px;
 }
-.histogram > dl > dd > .bar {
+
+#stats .histogram > dl > dd > .bar {
     display: block;
     overflow: hidden;
     color: #fff;
@@ -142,9 +228,15 @@ p mark, h5 mark {
     line-height: 0;
     font-size: 8px;
 }
-.histogram > dl > dd > .bar-fr {
+
+#stats .histogram > dl > dd > .bar-fr {
     background-color: #17a2b8;
 }
-.histogram > dl > dd > .bar-en {
+
+#stats .histogram > dl > dd > .bar-en {
     background-color: #6c757d;
+}
+
+#stats .statistics {
+    margin: auto -15px;
 }
