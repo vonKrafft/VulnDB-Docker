@@ -1,1 +1,200 @@
-{"a896d8b09218fe3ebc21":{"title":"Welcome to VulnDB","owasp":"A7:2017 - Cross-Site Scripting (XSS)","description":"If you can read this, it means that the Nginx and PHP Docker containers are running and that the directories and their contents have been correctly created with the appropriate privileges. **What to do now?**\n- You can create new templates by clicking `Add` at the top right\n- Next to you find the buttons:\n    - `Export` to download the JSON file in which all data is stored\n    - `Import` to import JSON content (previously exported for example ...)\n    - `Stats` to view statistics on the list of templates (distribution by language and OWASP categories)\n- To modify a template, use the `Edit` button to the right of the title\n- You can quickly copy some of the contents of the template using the _copy_ icon to the left of the text\n- To delete a template, use the `Delete` button at the bottom of the edit form\n\nIf you have any questions or feedbacks, take a look at the project's on [GitHub](https:\/\/github.com\/vonKrafft\/VulnDB-Docker) :)","consequences":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in porta dolor. Fusce luctus ac dui et tincidunt. Cras sit amet leo lacus. Vivamus in lobortis mi. Praesent non augue quis nibh fermentum aliquam. Etiam pellentesque augue sit amet quam accumsan mollis. Suspendisse potenti. Donec luctus posuere consequat. Duis pharetra est eu dui volutpat pulvinar. Aliquam sit amet tempor libero, quis fringilla risus. Fusce risus sem, consectetur quis vestibulum quis, faucibus molestie diam. ","recommendations":"Vivamus quis tempor neque, condimentum maximus augue. Ut malesuada dolor sit amet justo viverra, vel placerat justo tincidunt. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed commodo urna fermentum dolor iaculis, quis dapibus arcu lacinia. Aliquam erat volutpat. Proin non orci est. Vivamus laoreet mattis magna, quis blandit neque. ","language":"EN"},"c194f969bc02cf4489f3":{"title":"Bienvenue sur VulnDB","owasp":"A7:2017 - Cross-Site Scripting (XSS)","description":"Si vous pouvez lire ceci, cela signifie que les containers Docker Nginx et PHP tournent et que les r\u00e9pertoires et leur contenu ont \u00e9t\u00e9 correctement cr\u00e9\u00e9s avec les privil\u00e8ges ad\u00e9quats. **Que faire \u00e0 pr\u00e9sent ?**\n- Vous pouvez cr\u00e9er de nouveaux templates en cliquant sur `Add` en haut \u00e0 droite\n- \u00c0 cot\u00e9, vous trouvez les boutons :\n    - `Export` pour t\u00e9l\u00e9charger le fichier JSON dans lequel sont stock\u00e9es toutes les donn\u00e9es\n    - `Import` pour importer du contenu JSON (pr\u00e9c\u00e9demment export\u00e9 par exemple ...)\n    - `Stats` afin de visualiser des statistiques sur la liste des templates (r\u00e9partition par langue FR\/EN et par cat\u00e9gories OWASP)\n- Pour modifier un template, utilisez le bouton `Edit` \u00e0 droite du titre\n- Vous pouvez rapidement copier une partie du contenu du template \u00e0 l'aide de l'ic\u00f4ne _copy_ \u00e0 gauche du texte\n- Pour supprimer un template, utilisez le bouton `Delete` en bas du formulaire d'\u00e9dition\n\nSi vous avez des questions ou des remarques, faites un tour sur le [GitHub](https:\/\/github.com\/vonKrafft\/VulnDB-Docker) du projet :)","consequences":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in porta dolor. Fusce luctus ac dui et tincidunt. Cras sit amet leo lacus. Vivamus in lobortis mi. Praesent non augue quis nibh fermentum aliquam. Etiam pellentesque augue sit amet quam accumsan mollis. Suspendisse potenti. Donec luctus posuere consequat. Duis pharetra est eu dui volutpat pulvinar. Aliquam sit amet tempor libero, quis fringilla risus. Fusce risus sem, consectetur quis vestibulum quis, faucibus molestie diam. ","recommendations":"Vivamus quis tempor neque, condimentum maximus augue. Ut malesuada dolor sit amet justo viverra, vel placerat justo tincidunt. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed commodo urna fermentum dolor iaculis, quis dapibus arcu lacinia. Aliquam erat volutpat. Proin non orci est. Vivamus laoreet mattis magna, quis blandit neque. ","language":"FR"}}
+[
+    {
+        "id": "003aa8d1fc4070380750",
+        "title": "A1:2017 - Injection",
+        "owasp": "A1:2017 - Injection",
+        "description": "Les injections, telles que l'injection SQL, NoSQL, OS et LDAP, se produisent lorsque des donn\u00e9es non fiables sont envoy\u00e9es \u00e0 un interpr\u00e9teur dans le cadre d'une commande ou d'une requ\u00eate. Les donn\u00e9es malveillantes de l'attaquant peuvent inciter l'interpr\u00e8te \u00e0 ex\u00e9cuter des commandes non intentionnelles ou \u00e0 acc\u00e9der \u00e0 des donn\u00e9es sans autorisation appropri\u00e9e.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "0f72e90255c2369de130",
+        "title": "A2:2017 - Broken Authentication",
+        "owasp": "A2:2017 - Broken Authentication",
+        "description": "Les fonctions d'application li\u00e9es \u00e0 l'authentification et \u00e0 la gestion des sessions sont souvent impl\u00e9ment\u00e9es de mani\u00e8re incorrecte, permettant aux attaquants de compromettre les mots de passe, les cl\u00e9s ou les jetons de session, ou d'exploiter d'autres failles d'impl\u00e9mentation afin d\u2019usurper l'identit\u00e9 des autres utilisateurs, de fa\u00e7on temporaire ou permanente.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "171fefd4b6eb2ac66bec",
+        "title": "A3:2017 - Sensitive Data Exposure",
+        "owasp": "A3:2017 - Sensitive Data Exposure",
+        "description": "De nombreuses applications Web et API ne prot\u00e8gent pas correctement les donn\u00e9es sensibles, telles que les donn\u00e9es financi\u00e8res, les soins de sant\u00e9 et les donn\u00e9es personnelles. Les attaquants peuvent voler ou modifier ces donn\u00e9es faiblement prot\u00e9g\u00e9es pour commettre une fraude par carte de cr\u00e9dit, un vol d\u2019identit\u00e9 ou d\u2019autres infractions. Les donn\u00e9es sensibles peuvent \u00eatre compromises sans protection suppl\u00e9mentaire, telle que le chiffrement des donn\u00e9es stock\u00e9es ou transmises, et n\u00e9cessitent des pr\u00e9cautions particuli\u00e8res lorsqu'elles sont \u00e9chang\u00e9es avec le navigateur.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "2c3153a25024788a4efd",
+        "title": "A4:2017 - XML External Entities (XXE)",
+        "owasp": "A4:2017 - XML External Entities (XXE)",
+        "description": "De nombreux analyseurs XML, anciens ou mal configur\u00e9s, \u00e9valuent les r\u00e9f\u00e9rences aux entit\u00e9s externes au sein de documents XML. Les entit\u00e9s externes peuvent \u00eatre utilis\u00e9es pour lire des fichiers locaux \u00e0 l'aide du gestionnaire de fichiers URI, des partages de fichiers internes, de l'analyse du port interne, de l'ex\u00e9cution de code \u00e0 distance et des attaques par d\u00e9ni de service.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "37779d2f20f73968fb93",
+        "title": "A5:2017 - Broken Access Control",
+        "owasp": "A5:2017 - Broken Access Control",
+        "description": "Les restrictions sur ce que les utilisateurs authentifi\u00e9s sont autoris\u00e9s \u00e0 faire ne sont souvent pas correctement appliqu\u00e9es. Les attaquants peuvent exploiter ces vuln\u00e9rabilit\u00e9s pour acc\u00e9der \u00e0 des fonctionnalit\u00e9s et\/ou \u00e0 des donn\u00e9es non autoris\u00e9es, telles qu'acc\u00e9der aux comptes d'autres utilisateurs, afficher des fichiers sensibles, modifier les donn\u00e9es d'autres utilisateurs, modifier les droits d'acc\u00e8s, etc.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "3ff675cc9164b87ae861",
+        "title": "A6:2017 - Security Misconfiguration",
+        "owasp": "A6:2017 - Security Misconfiguration",
+        "description": "Le probl\u00e8me le plus souvent rencontr\u00e9 est une mauvaise configuration de la s\u00e9curit\u00e9. Cela est g\u00e9n\u00e9ralement d\u00fb \u00e0 des configurations par d\u00e9faut non s\u00e9curis\u00e9es, \u00e0 des configurations incompl\u00e8tes ou ad-hoc, \u00e0 un stockage ouvert sur Internet (cloud), \u00e0 des en-t\u00eates HTTP mal configur\u00e9s et \u00e0 des messages d'erreur d\u00e9taill\u00e9s contenant des informations sensibles. Tous les syst\u00e8mes d'exploitation, infrastructures, biblioth\u00e8ques et applications doivent non seulement \u00eatre configur\u00e9s de mani\u00e8re s\u00e9curis\u00e9e, mais ils doivent \u00e9galement \u00eatre mis \u00e0 jour rapidement.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "f3fe0f7ccf14e14eb1b2",
+        "title": "A7:2017 - Cross-Site Scripting (XSS)",
+        "owasp": "A7:2017 - Cross-Site Scripting (XSS)",
+        "description": "Des failles XSS se produisent chaque fois qu'une application inclut des donn\u00e9es non fiables dans une nouvelle page Web sans validation ou \u00e9chappement correct, ou met \u00e0 jour une page Web existante avec des donn\u00e9es fournies par l'utilisateur \u00e0 l'aide d'une API de navigateur pouvant cr\u00e9er du HTML ou du JavaScript. Les XSS permettent aux attaquants d'ex\u00e9cuter des scripts dans le navigateur de la victime, ce qui peut d\u00e9tourner des sessions utilisateur, alt\u00e9rer des sites Web ou rediriger l'utilisateur vers des sites malveillants.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "a33ce525bebfb78790d9",
+        "title": "A8:2017 - Insecure Deserialization",
+        "owasp": "A8:2017 - Insecure Deserialization",
+        "description": "Une d\u00e9s\u00e9rialisation non s\u00e9curis\u00e9e conduit souvent \u00e0 l'ex\u00e9cution de code \u00e0 distance. M\u00eame si les failles de d\u00e9s\u00e9rialisation n'entra\u00eenent pas l'ex\u00e9cution de code \u00e0 distance, elles peuvent \u00eatre utilis\u00e9es pour effectuer des attaques, notamment des attaques par rejeu, des attaques par injection et des attaques par \u00e9l\u00e9vation de privil\u00e8ges.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "da022e25b18d2cdae5b7",
+        "title": "A9:2017 - Using Components with Known Vulnerabilities",
+        "owasp": "A9:2017 - Using Components with Known Vulnerabilities",
+        "description": "Les composants, tels que les biblioth\u00e8ques, les Framework et d'autres modules logiciels, s'ex\u00e9cutent avec les m\u00eames privil\u00e8ges que l'application. Si un composant vuln\u00e9rable est exploit\u00e9, une telle attaque peut faciliter la perte de donn\u00e9es ou la prise de contr\u00f4le de serveur. Les applications et les API utilisant des composants avec des vuln\u00e9rabilit\u00e9s connues peuvent saper les d\u00e9fenses des applications et permettre diverses attaques et impacts.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "f5c67e08875fa80f124d",
+        "title": "A10:2017 - Insufficient Logging & Monitoring",
+        "owasp": "A10:2017 - Insufficient Logging & Monitoring",
+        "description": "Une journalisation et une surveillance insuffisantes, associ\u00e9es \u00e0 une int\u00e9gration manquante ou inefficace avec la r\u00e9ponse \u00e0 un incident, permettent aux attaquants d\u2019attaquer davantage les syst\u00e8mes, de maintenir la persistance, de faire pivoter un plus grand nombre de syst\u00e8mes et d\u2019alt\u00e9rer, d\u2019extraire ou de d\u00e9truire des donn\u00e9es. La plupart des \u00e9tudes sur les cyber-attaques indiquent que le temps n\u00e9cessaire pour d\u00e9tecter une violation est sup\u00e9rieur \u00e0 200 jours, g\u00e9n\u00e9ralement d\u00e9tect\u00e9 par des tiers plut\u00f4t que par une surveillance interne.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "FR"
+    },
+    {
+        "id": "4f51b87ce7598a31c72f",
+        "title": "A1:2017 - Injection",
+        "owasp": "A1:2017 - Injection",
+        "description": "Injection flaws, such as SQL, NoSQL, OS, and LDAP injection, occur when untrusted data is sent to an interpreter as part of a command or query. The attacker's hostile data can trick the interpreter into executing unintended commands or accessing data without proper authorization.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "aa8dddea7bc785422f97",
+        "title": "A2:2017 - Broken Authentication",
+        "owasp": "A2:2017 - Broken Authentication",
+        "description": "Application functions related to authentication and session management are often implemented incorrectly, allowing attackers to compromise passwords, keys, or session tokens, or to exploit other implementation flaws to assume other users' identities temporarily or permanently.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "f556fd55fcb7c5cc97d5",
+        "title": "A3:2017 - Sensitive Data Exposure",
+        "owasp": "A3:2017 - Sensitive Data Exposure",
+        "description": "Many web applications and APIs do not properly protect sensitive data, such as financial, healthcare, and PII. Attackers may steal or modify such weakly protected data to conduct credit card fraud, identity theft, or other crimes. Sensitive data may be compromised without extra protection, such as encryption at rest or in transit, and requires special precautions when exchanged with the browser.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "05d78ee7adecb471b644",
+        "title": "A4:2017 - XML External Entities (XXE)",
+        "owasp": "A4:2017 - XML External Entities (XXE)",
+        "description": "Many older or poorly configured XML processors evaluate external entity references within XML documents. External entities can be used to disclose internal files using the file URI handler, internal file shares, internal port scanning, remote code execution, and denial of service attacks.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "80b3b2129557a1ca8315",
+        "title": "A5:2017 - Broken Access Control",
+        "owasp": "A5:2017 - Broken Access Control",
+        "description": "Restrictions on what authenticated users are allowed to do are often not properly enforced. Attackers can exploit these flaws to access unauthorized functionality and\/or data, such as access other users' accounts, view sensitive files, modify other users' data, change access rights, etc.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "0a4a8e6aaf9f8de82c56",
+        "title": "A6:2017 - Security Misconfiguration",
+        "owasp": "A6:2017 - Security Misconfiguration",
+        "description": "Security misconfiguration is the most commonly seen issue. This is commonly a result of insecure default configurations, incomplete or ad hoc configurations, open cloud storage, misconfigured HTTP headers, and verbose error messages containing sensitive information. Not only must all operating systems, frameworks, libraries, and applications be securely configured, but they must be patched\/upgraded in a timely fashion.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "ddf9ab3916cdcdd2d95f",
+        "title": "A7:2017 - Cross-Site Scripting (XSS)",
+        "owasp": "A7:2017 - Cross-Site Scripting (XSS)",
+        "description": "XSS flaws occur whenever an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "6f0f518965fdd4260232",
+        "title": "A8:2017 - Insecure Deserialization",
+        "owasp": "A8:2017 - Insecure Deserialization",
+        "description": "Insecure deserialization often leads to remote code execution. Even if deserialization flaws do not result in remote code execution, they can be used to perform attacks, including replay attacks, injection attacks, and privilege escalation attacks.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "8911166950ce70f63182",
+        "title": "A9:2017 - Using Components with Known Vulnerabilities",
+        "owasp": "A9:2017 - Using Components with Known Vulnerabilities",
+        "description": "Components, such as libraries, frameworks, and other software modules, run with the same privileges as the application. If a vulnerable component is exploited, such an attack can facilitate serious data loss or server takeover. Applications and APIs using components with known vulnerabilities may undermine application defenses and enable various attacks and impacts.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "9e045c10809ed8121de5",
+        "title": "A10:2017 - Insufficient Logging & Monitoring",
+        "owasp": "A10:2017 - Insufficient Logging & Monitoring",
+        "description": "Insufficient logging and monitoring, coupled with missing or ineffective integration with incident response, allows attackers to further attack systems, maintain persistence, pivot to more systems, and tamper, extract, or destroy data. Most breach studies show time to detect a breach is over 200 days, typically detected by external parties rather than internal processes or monitoring.",
+        "consequences": "",
+        "recommendations": "",
+        "language": "EN"
+    },
+    {
+        "id": "2dd66331c7c84b078019",
+        "title": "Bienvenue sur VulnDB",
+        "owasp": null,
+        "description": "Si vous pouvez lire ceci, cela signifie que les containers Docker Nginx et PHP tournent et que les r\u00e9pertoires et leur contenu ont \u00e9t\u00e9 correctement cr\u00e9\u00e9s avec les privil\u00e8ges ad\u00e9quats. **Que faire \u00e0 pr\u00e9sent ?**\n- Vous pouvez cr\u00e9er de nouveaux templates en cliquant sur `Add` en haut \u00e0 droite\n- \u00c0 cot\u00e9, vous trouvez les boutons suivants :\n    - `Export` pour t\u00e9l\u00e9charger le fichier JSON dans lequel sont stock\u00e9es toutes les donn\u00e9es\n    - `Import` pour importer du contenu JSON (pr\u00e9c\u00e9demment export\u00e9 par exemple ...)\n    - `Stats` afin de visualiser des statistiques sur la liste des templates (r\u00e9partition par langue FR\/EN et par cat\u00e9gories OWASP)\n- Pour modifier un template, utilisez le bouton `Edit` \u00e0 droite du titre\n- Vous pouvez rapidement copier une partie du contenu du template \u00e0 l'aide de l'ic\u00f4ne _copy_ \u00e0 gauche du texte\n- Pour supprimer un template, utilisez le bouton `Delete` en bas du formulaire d'\u00e9dition\n\nSi vous avez des questions ou des remarques, faites un tour sur le [GitHub](https:\/\/github.com\/vonKrafft\/VulnDB-Docker) du projet :)",
+        "consequences": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in porta dolor. Fusce luctus ac dui et tincidunt. Cras sit amet leo lacus. Vivamus in lobortis mi. Praesent non augue quis nibh fermentum aliquam. Etiam pellentesque augue sit amet quam accumsan mollis. Suspendisse potenti. Donec luctus posuere consequat. Duis pharetra est eu dui volutpat pulvinar. Aliquam sit amet tempor libero, quis fringilla risus. Fusce risus sem, consectetur quis vestibulum quis, faucibus molestie diam.\n\nQuisque tristique est enim, hendrerit sagittis eros commodo ac. Maecenas nibh erat, ornare et scelerisque id, malesuada eget quam. Sed imperdiet, sapien non auctor condimentum, lectus arcu molestie ligula, vel rutrum orci libero sed lacus.\n\nQuisque faucibus risus quis est egestas, gravida finibus ex euismod. Donec malesuada, libero sit amet molestie luctus, massa magna luctus augue, a eleifend eros nibh vitae nibh. Sed ultricies quam nec sem luctus, sit amet accumsan sem cursus.",
+        "recommendations": "Vivamus quis tempor neque, condimentum maximus augue. Ut malesuada dolor sit amet justo viverra, vel placerat justo tincidunt. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed commodo urna fermentum dolor iaculis, quis dapibus arcu lacinia. Aliquam erat volutpat. Proin non orci est. Vivamus laoreet mattis magna, quis blandit neque. ",
+        "language": "FR"
+    },
+    {
+        "id": "6f279abca06df64d0db2",
+        "title": "Welcome to VulnDB",
+        "owasp": null,
+        "description": "If you can read this, it means that the Nginx and PHP Docker containers are running and that the directories and their contents have been correctly created with the appropriate privileges. **What to do now?**\n- You can create new templates by clicking `Add` at the top right\n- Next to it, you find the following buttons:\n    - `Export` to download the JSON file in which all data is stored\n    - `Import` to import JSON content (previously exported for example ...)\n    - `Stats` to view statistics on the list of templates (distribution by language and OWASP categories)\n- To modify a template, use the `Edit` button to the right of the title\n- You can quickly copy some of the contents of the template using the _copy_ icon to the left of the text\n- To delete a template, use the `Delete` button at the bottom of the edit form\n\nIf you have any questions or feedbacks, take a look at the project's on [GitHub](https:\/\/github.com\/vonKrafft\/VulnDB-Docker) :)",
+        "consequences": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in porta dolor. Fusce luctus ac dui et tincidunt. Cras sit amet leo lacus. Vivamus in lobortis mi. Praesent non augue quis nibh fermentum aliquam. Etiam pellentesque augue sit amet quam accumsan mollis. Suspendisse potenti. Donec luctus posuere consequat. Duis pharetra est eu dui volutpat pulvinar. Aliquam sit amet tempor libero, quis fringilla risus. Fusce risus sem, consectetur quis vestibulum quis, faucibus molestie diam.\n\nQuisque tristique est enim, hendrerit sagittis eros commodo ac. Maecenas nibh erat, ornare et scelerisque id, malesuada eget quam. Sed imperdiet, sapien non auctor condimentum, lectus arcu molestie ligula, vel rutrum orci libero sed lacus.\n\nQuisque faucibus risus quis est egestas, gravida finibus ex euismod. Donec malesuada, libero sit amet molestie luctus, massa magna luctus augue, a eleifend eros nibh vitae nibh. Sed ultricies quam nec sem luctus, sit amet accumsan sem cursus.",
+        "recommendations": "Vivamus quis tempor neque, condimentum maximus augue. Ut malesuada dolor sit amet justo viverra, vel placerat justo tincidunt. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed commodo urna fermentum dolor iaculis, quis dapibus arcu lacinia. Aliquam erat volutpat. Proin non orci est. Vivamus laoreet mattis magna, quis blandit neque. ",
+        "language": "EN"
+    }
+]
