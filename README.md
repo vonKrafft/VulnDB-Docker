@@ -22,7 +22,7 @@ You have to install `docker` and `docker-compose` (https://docs.docker.com/compo
 ```
 $ git clone https://github.com/vonKrafft/VulnDB-Docker
 $ cd VulnDB-Docker
-$ chmod a+rw web-vulndb/log/{access,error}.log web-vulndb/data/vulndb.json 
+$ chmod a+rw vulndb/web/log/{access,error}.log vulndb/php/data/vulndb.json 
 $ docker-compose up -d
 ```
 

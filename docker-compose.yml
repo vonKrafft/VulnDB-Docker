@@ -5,9 +5,9 @@ services:
         image: nginx:stable-alpine
         container_name: web-vulndb
         volumes:
-            - "./web-vulndb/www:/usr/share/nginx/html:ro"
-            - "./web-vulndb/log:/var/log/nginx"
-            - "./web-vulndb/nginx.conf:/etc/nginx/nginx.conf:ro"
+            - "./vulndb/web/www:/usr/share/nginx/html:ro"
+            - "./vulndb/web/log:/var/log/nginx"
+            - "./vulndb/web/nginx.conf:/etc/nginx/nginx.conf:ro"
         ports:
             - "80:80"
 
@@ -15,6 +15,5 @@ services:
         image: php:fpm-alpine
         container_name: php-vulndb
         volumes:
-            - "./web-vulndb/api:/script:ro"
-            - "./web-vulndb/data:/data"
-
+            - "./vulndb/php/api:/script:ro"
+            - "./vulndb/php/data:/data"
