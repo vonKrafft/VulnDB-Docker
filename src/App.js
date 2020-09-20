@@ -1,22 +1,36 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Link, Route, Switch } from "react-router-dom";
-import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, Dropdown } from 'semantic-ui-react'
+import { Link, Route, Redirect } from "react-router-dom";
+import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, Dropdown, Dimmer } from 'semantic-ui-react'
 import './App.css';
 import _ from 'lodash';
 
 export default function App() {
+    const renderTplHomePage = (props) => ( <TplHomePage {...props} /> );
     return (
-        <Route path="/" component={TplHomePage} />
+        <React.Fragment>
+            <Route path="/" exact render={() => <Redirect to="/home/FR" />} />
+            <Route path="/home/:lang" render={renderTplHomePage} />
+            <Route path="/search/:lang/:text" render={renderTplHomePage} />
+        </React.Fragment>
     );
 }
 
 class TplHomePage extends React.Component {
-    state = {
-        loading: true,
-        activeItem: null,
-        lang: 'FR',
-        templates: []
+    state = {}
+
+    constructor(props) {
+        const { lang, uuid, text } = props.match.params;
+        super(props);
+        this.state = {
+            loading: true,
+            lang: lang || 'FR',
+            activeItem: uuid || null,
+            search: text || '',
+            data: [],
+            total: 0,
+            templates: []
+        };
     }
 
     componentDidMount = () => {
@@ -25,18 +39,55 @@ class TplHomePage extends React.Component {
                 if (response.status < 400) return response.json(); 
                 else throw new Error(); 
             })
-            .then(result => this.setState({ 
-                loading: false, 
-                templates: result.data 
-            }))
+            .then(result => {
+                const { lang, search, uuid } = this.state;
+                this.filterTemplates(result.data, lang, search, uuid);
+            })
             .catch(error => this.setState({ 
                 loading: false, 
                 error 
             }));
     }
 
-    handleMenuItemClick = (e, { uuid }) => {
-        this.setState({ activeItem: uuid });
+    filterTemplates = (data, lang, search, uuid) => {
+        this.setState({ 
+            loading: true 
+        });
+
+        const templates = _.sortBy(_.filter(data, (o) => {
+            if (!search) return o.language === lang;
+            return o.language === lang && o.owasp !== o.title && (
+                o.title.toUpperCase().match(search.toUpperCase()) || 
+                o.description.toUpperCase().match(search.toUpperCase()) || 
+                o.consequences.toUpperCase().match(search.toUpperCase()) || 
+                o.recommendations.toUpperCase().match(search.toUpperCase()) 
+            );
+        }), [
+            (o) => parseInt(o.owasp.replace(/^A([0-9]+):.*$/i, '$1')),
+            (o) => o.title
+        ]);
+
+        this.setState({ 
+            loading: false, 
+            lang: lang, 
+            search: search, 
+            uuid: uuid, 
+            data: data, 
+            total: data.length, 
+            templates: templates 
+        });
+    }
+
+    handleSearchChange = (e, { name, value }) => {
+        const { data, lang, search, uuid } = { ...this.state, [name]: value };
+        this.filterTemplates(data, lang, search, uuid);
+        //this.searchInputRef.focus();
+        console.log(this.searchInputRef);
+    }
+
+    handleSearchClear = (e) => {
+        const { data, lang, uuid } = this.state;
+        this.filterTemplates(data, lang, '', uuid);
     }
 
     handleImportClick = (e) => {}
@@ -44,23 +95,7 @@ class TplHomePage extends React.Component {
     handleAddClick = (e) => {}
 
     render = () => {
-        const { loading, activeItem, templates, lang } = this.state;
-
-        const ftpl = _.sortBy(_.filter(templates, ['language', lang]), [
-            (o) => parseInt(o.owasp.replace(/A([0-9]+):.*/i, '$1')),
-            (o) => o.title
-        ]);
-        const sidebar =  _.sortBy(_.reduce(ftpl, (menu, tpl) => {
-            if (! menu[tpl.owasp]) {
-                menu[tpl.owasp] = { category: tpl.owasp, templates: [] };
-            }
-            if (tpl.owasp !== tpl.title) {
-                menu[tpl.owasp].templates.push(tpl);
-            }
-            return menu;
-        }, {}), [(o) => {
-            return parseInt(o.category.replace(/A([0-9]+):.*/i, '$1'));
-        }]);
+        const { loading, templates, total, search, lang } = this.state;
 
         const TplNavbar = () => (
             <Menu pointing secondary inverted size='huge' className='navbar'>
@@ -84,52 +119,12 @@ class TplHomePage extends React.Component {
             </Menu>
         );
 
-        const TplSidebar = ({data, shown, total}) => {
-            const options = [
-                { key: 'FR', text: 'FR', value: 'FR' },
-                { key: 'EN', text: 'EN', value: 'EN' },
-            ]
-            return (
-                <React.Fragment>
-                    <Input 
-                        fluid 
-                        placeholder='Search...' 
-                        label={
-                            <Dropdown defaultValue={lang} options={options} />
-                        }
-                        labelPosition='right'
-                    />
-                    <TplSidebarNav data={data} shown={shown} total={total} />
-                </React.Fragment>
-            );
-        };
-
-        const TplSidebarNav = ({data, shown, total}) => (
-            <Menu vertical>
-                <Menu.Item>
-                    <Message size='mini'>
-                        {shown} / {total} templates shown
-                    </Message>
-                </Menu.Item>
-                { _.map(data, (menu) => (
-                    <Menu.Item>
-                        <Menu.Header>{menu.category}</Menu.Header>
-                        <Menu.Menu>
-                            { _.map(menu.templates, (template) => (
-                                <Menu.Item>
-                                    <Link to={`view/${lang}/${template.uuid}`}>
-                                        {template.title}
-                                    </Link>
-                                </Menu.Item>
-                            )) }
-                        </Menu.Menu>
-                    </Menu.Item>
-                )) }
-            </Menu>
-        );
-
         const TplItem = ({template}) => (
-            <Segment size='mini' secondary={template.owasp === template.title}>
+            <Segment 
+                ref={React.useRef(template.uuid)} 
+                size='mini' 
+                secondary={template.owasp === template.title}
+            >
                 <Header size='medium'>
                     {template.title}
                     <Header.Subheader>{template.owasp}</Header.Subheader>
@@ -145,45 +140,105 @@ class TplHomePage extends React.Component {
             return (<ReactMarkdown source={markdown} className='paragraph' />);
         };
 
-        if (loading) {
-            return (
-                <React.Fragment>
-                    <TplNavbar />
-                    <Container className='wrapper'>
-                        <Grid>
-                            <Grid.Column width={4}>
-                                <TplSidebar data={[]} shown={0} total={0} />
-                            </Grid.Column>
-                            <Grid.Column width={12} floated='right'>
-                                <Loader active inline='centered' />
-                            </Grid.Column>
-                        </Grid>
-                    </Container>
-                </React.Fragment>
-            );
-
-        } else {
-            return (
-                <React.Fragment>
-                    <TplNavbar />
-                    <Container className='wrapper'>
-                        <Grid>
-                            <Grid.Column width={4}>
-                                <TplSidebar 
-                                    data={sidebar} 
-                                    shown={ftpl.length} 
-                                    total={templates.length} 
-                                />
-                            </Grid.Column>
-                            <Grid.Column width={12} floated='right'>
-                                { _.map(ftpl, (template) => (
-                                    <TplItem template={template} />
-                                )) }
-                            </Grid.Column>
-                        </Grid>
-                    </Container>
-                </React.Fragment>
-            );
-        }
+        return (
+            <React.Fragment>
+                <TplNavbar />
+                <Container className='wrapper'>
+                    <Grid>
+                        <Grid.Column width={4}>
+                            <Dimmer active={loading} inverted></Dimmer>
+                            <TplSearchInput 
+                                search={search} 
+                                lang={lang} 
+                                onChange={this.handleSearchChange} 
+                                onClear={this.handleSearchClear} 
+                            />
+                            <TplSidebarMenu 
+                                templates={templates} 
+                                total={total}
+                                key={`Sidebar-${lang}-${search}`}
+                            />
+                        </Grid.Column>
+                        <Grid.Column width={12} floated='right'>
+                            <Dimmer active={loading} inverted><Loader /></Dimmer>
+                            { _.map(templates, (template) => (
+                                <TplItem template={template} />
+                            )) }
+                        </Grid.Column>
+                    </Grid>
+                </Container>
+            </React.Fragment>
+        );
     }
 }
+
+const TplSearchInput = (props) => {
+    const { search, lang, onChange, onClear } = props;
+
+    const options = [
+        { key: 'FR', text: 'FR', value: 'FR' },
+        { key: 'EN', text: 'EN', value: 'EN' },
+    ];
+
+    return (
+        <Input 
+            fluid 
+            placeholder='Search...' 
+            name='search'
+            value={search}
+            onChange={onChange}
+            label={<Dropdown 
+                name='lang' 
+                value={lang || 'FR'} 
+                options={options} 
+                onChange={onChange}
+            />}
+            labelPosition='left' 
+            icon={<Icon name='close' link onClick={onClear} />}
+        />
+    );
+};
+
+const TplSidebarMenu = (props) => {
+    const { templates, total } = props;
+
+    const sidebar =  _(templates).sortBy([
+        (o) => parseInt(o.owasp.replace(/^A([0-9]+):.*$/i, '$1')),
+        (o) => o.title
+    ]).reduce((menu, tpl) => {
+        if (! menu[tpl.owasp]) {
+            menu[tpl.owasp] = { 
+                category: tpl.owasp, 
+                templates: [] 
+            };
+        }
+        if (tpl.owasp !== tpl.title) {
+            menu[tpl.owasp].templates.push(tpl);
+        }
+        return menu;
+    }, {});
+
+    return (
+        <Menu vertical>
+            <Menu.Item>
+                <Message size='mini'>
+                    {templates.length} / {total} templates shown
+                </Message>
+            </Menu.Item>
+            { _.map(sidebar || [], (menu) => (
+                <Menu.Item>
+                    <Menu.Header>{menu.category}</Menu.Header>
+                    <Menu.Menu>
+                        { _.map(menu.templates, (template) => (
+                            <Menu.Item>
+                                <Link to={`view/${template.uuid}`}>
+                                    {template.title}
+                                </Link>
+                            </Menu.Item>
+                        )) }
+                    </Menu.Menu>
+                </Menu.Item>
+            )) }
+        </Menu>
+    );
+};

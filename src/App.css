@@ -44,13 +44,18 @@
     color: rgba(0,0,0,.5);
 }
 
-.ui.inline.loader {
+.ui.dimmer .ui.loader {
+    top: 0;
     margin: 5em 0;
 }
 
 .ui.header .sub.header {
     float: right;
     font-size: .7em;
+}
+
+.ui.segment {
+    margin-top: 0;
 }
 
 .ui.secondary.segment {
