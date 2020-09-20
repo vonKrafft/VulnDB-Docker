@@ -91,8 +91,25 @@ code {
   margin-top: 0;
 }
 
-.ui.segment[aria-header="true"] {
+.ui.segment[data-header="true"] {
   background-color: #c2d0de;
+}
+
+.ui.segment .ui.basic.label {
+  background-color: transparent;
+  padding: .2916em .833em;
+  color: rgba(0,0,0,.6);
+}
+
+.ui.segment a.ui.basic.label:hover {
+  color: inherit;
+  color: rgba(0,0,0,.6);
+  border-color: rgba(34,36,38,.15);
+  opacity: .7;
+}
+
+.ui.segment a.ui.empty.label > .icon {
+  margin-right: 0;
 }
 
 .ui.segment .paragraph {

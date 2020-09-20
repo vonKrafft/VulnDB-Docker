@@ -15,7 +15,7 @@
 import React from 'react';
 import { Link, Route, Redirect } from "react-router-dom";
 import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, 
-  Dropdown, Dimmer, Button, Popup } from 'semantic-ui-react'
+  Dropdown, Dimmer, Button, Popup, Label } from 'semantic-ui-react'
 
 import unified from 'unified'
 import remarkParse from 'remark-parse'
@@ -118,16 +118,22 @@ class TplHomePage extends React.Component {
     this.setState({ loading: false, templates: templates, [name]: value });
   }
 
-  handleSearchClear = (e) => {
+  handleSearchClear = () => {
     const { data, lang } = this.state;
     this.setState({ loading: true });
     const templates = this.filter(data, lang, '');
     this.setState({ loading: false, templates: templates, search: '' });
   }
 
-  handleSearchSave = (e) => {
+  handleSearchPin = () => {
     const { lang, search } = this.state;
-    const path = search ? `/search/${lang}/${search}` : `/home/${lang}`
+    const path = search ? `/search/${lang}/${search}` : `/home/${lang}`;
+    this.props.history.push(path);
+  }
+
+  handleViewPin = (uuid) => {
+    const { lang } = this.state;
+    const path = `/view/${lang}/${uuid}`;
     this.props.history.push(path);
   }
 
@@ -154,7 +160,7 @@ class TplHomePage extends React.Component {
                 lang={lang} 
                 onChange={this.handleSearchChange} 
                 onClear={this.handleSearchClear} 
-                onSave={this.handleSearchSave}
+                onPin={this.handleSearchPin}
               />
               <TplSidebarMenu 
                 templates={templates} 
@@ -171,6 +177,7 @@ class TplHomePage extends React.Component {
                 templates={templates} 
                 refs={refs} 
                 search={search} 
+                onPin={this.handleViewPin}
               />
             </Grid.Column>
           </Grid>
@@ -185,24 +192,46 @@ class TplHomePage extends React.Component {
  *****************************************************************************/
  
 const TplList = (props) => {
-  const { templates, refs, search } = props;
+  const { templates, refs, search, onPin, onEdit } = props;
 
   const TplListItem = ({ tpl, refs }) => (
     <div
       key={tpl.uuid} 
       ref={refs[tpl.uuid]} 
       class='ui mini segment' 
-      aria-header={tpl.owasp === tpl.title}
+      data-header={tpl.owasp === tpl.title}
     >
-      <Header size='medium'>
-        {tpl.title}
-        <Header.Subheader>{tpl.owasp}</Header.Subheader>
-      </Header>
+      <TplListHeader tpl={tpl} onPin={onPin} onEdit={onEdit} />
       <TplListContent md={tpl.description} />
       <TplListContent md={tpl.consequences} />
       <TplListContent md={tpl.recommendations} />
     </div>
   );
+
+  const TplListHeader= ({ tpl, onPin, onEdit }) => {    
+    return (
+      <Header>
+        {tpl.title}
+        <Label basic as='a' size='mini' content='Edit' icon='edit outline' />
+        <Popup
+          trigger={<Label 
+            as='a' 
+            basic 
+            size='mini' 
+            icon='pin' 
+            empty 
+            onClick={() => onPin(tpl.uuid)}
+          />}
+          size='mini' 
+          content='Pin the template to share it'
+          position='bottom right'
+        />
+        <Header.Subheader>
+          {tpl.owasp}
+        </Header.Subheader>
+      </Header>
+    );
+  };
 
   const TplListContent = ({ md }) => {
     if (search) md = md.replace(new RegExp('(' + search + ')', 'i'), '||$1||');
@@ -241,7 +270,7 @@ const TplNavbar = (props) => {
   return (
     <Menu pointing secondary inverted size='huge' className='navbar'>
       <Container>
-        <Menu.Item header>VulnDB</Menu.Item>
+        <Menu.Item header><Link to='/'>VulnDB</Link></Menu.Item>
         <Menu.Menu icon position='right'>
           <Menu.Item href='/api/export' target='_blank'>
             <Icon name='download' />
@@ -266,7 +295,7 @@ const TplNavbar = (props) => {
  *****************************************************************************/
 
 const TplSearchInput = (props) => {
-  const { search, lang, onChange, onClear, onSave } = props;
+  const { search, lang, onChange, onClear, onPin } = props;
 
   const options = [
     { key: 'FR', text: 'FR', value: 'FR' },
@@ -297,11 +326,11 @@ const TplSearchInput = (props) => {
       action={<Popup
         trigger={<Button 
           basic 
-          icon='save' 
-          onClick={onSave} 
+          icon='pin' 
+          onClick={onPin} 
         />}
         size='mini' 
-        content='Save the search to share it'
+        content='Pin the search to share it'
         position='bottom right'
       />} 
     />
