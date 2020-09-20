@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link, Route, Redirect } from "react-router-dom";
-import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, Dropdown, Dimmer } from 'semantic-ui-react'
+import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, Dropdown, Dimmer, Button, Popup } from 'semantic-ui-react'
 import './App.css';
 import _ from 'lodash';
 
@@ -81,13 +81,17 @@ class TplHomePage extends React.Component {
     handleSearchChange = (e, { name, value }) => {
         const { data, lang, search, uuid } = { ...this.state, [name]: value };
         this.filterTemplates(data, lang, search, uuid);
-        //this.searchInputRef.focus();
-        console.log(this.searchInputRef);
     }
 
     handleSearchClear = (e) => {
         const { data, lang, uuid } = this.state;
         this.filterTemplates(data, lang, '', uuid);
+    }
+
+    handleSearchSave = (e) => {
+        const { lang, search } = this.state;
+        const path = search ? `/search/${lang}/${search}` : `/home/${lang}`
+        this.props.history.push(path);
     }
 
     handleImportClick = (e) => {}
@@ -152,6 +156,7 @@ class TplHomePage extends React.Component {
                                 lang={lang} 
                                 onChange={this.handleSearchChange} 
                                 onClear={this.handleSearchClear} 
+                                onSave={this.handleSearchSave}
                             />
                             <TplSidebarMenu 
                                 templates={templates} 
@@ -173,7 +178,7 @@ class TplHomePage extends React.Component {
 }
 
 const TplSearchInput = (props) => {
-    const { search, lang, onChange, onClear } = props;
+    const { search, lang, onChange, onClear, onSave } = props;
 
     const options = [
         { key: 'FR', text: 'FR', value: 'FR' },
@@ -188,13 +193,29 @@ const TplSearchInput = (props) => {
             value={search}
             onChange={onChange}
             label={<Dropdown 
+                basic 
                 name='lang' 
                 value={lang || 'FR'} 
                 options={options} 
                 onChange={onChange}
             />}
             labelPosition='left' 
-            icon={<Icon name='close' link onClick={onClear} />}
+            icon={<Icon 
+                link 
+                name='close' 
+                disabled={!search} 
+                onClick={onClear} 
+            />} 
+            action={<Popup
+                trigger={<Button 
+                    basic 
+                    icon='save' 
+                    onClick={onSave} 
+                />}
+                size='mini' 
+                content='Save the search to share it'
+                position='bottom right'
+            />} 
         />
     );
 };
