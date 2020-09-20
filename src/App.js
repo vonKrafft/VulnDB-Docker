@@ -14,8 +14,8 @@
 
 import React from 'react';
 import { Link, Route, Redirect } from "react-router-dom";
-import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, 
-  Dropdown, Dimmer, Button, Popup, Label } from 'semantic-ui-react'
+import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, Ref,
+  Dropdown, Dimmer, Button, Popup, Label, Sticky } from 'semantic-ui-react'
 
 import unified from 'unified'
 import remarkParse from 'remark-parse'
@@ -56,6 +56,7 @@ class TplHomePage extends React.Component {
       refs: [],
       templates: []
     };
+    this.containerRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -149,34 +150,38 @@ class TplHomePage extends React.Component {
           onAdd={this.handleAddClick} 
         />
         <Container className='wrapper'>
-          <Grid>
-            <Grid.Column width={4}>
-              <Dimmer active={loading} inverted></Dimmer>
-              <TplSearchInput 
-                search={search} 
-                lang={lang} 
-                onChange={this.handleSearchChange} 
-                onClear={this.handleSearchClear} 
-              />
-              <TplSidebarMenu 
-                templates={templates} 
-                total={total} 
-                onClick={this.handleTemplatePin} 
-                key={`Sidebar-${lang}-${search}`}
-              />
-            </Grid.Column>
-            <Grid.Column width={12} floated='right'>
-              <Dimmer active={loading} inverted>
-                <Loader />
-              </Dimmer>
-              <TplList 
-                templates={templates} 
-                refs={refs} 
-                search={search} 
-                onPin={this.handleTemplatePin}
-              />
-            </Grid.Column>
-          </Grid>
+          <Ref innerRef={this.containerRef}>
+            <Grid>
+              <Grid.Column width={4}>
+                <Sticky context={this.containerRef} offset={71.2333}>
+                  <Dimmer active={loading} inverted></Dimmer>
+                  <TplSearchInput 
+                    search={search} 
+                    lang={lang} 
+                    onChange={this.handleSearchChange} 
+                    onClear={this.handleSearchClear} 
+                  />
+                  <TplSidebarMenu 
+                    templates={templates} 
+                    total={total} 
+                    onClick={this.handleTemplatePin} 
+                    key={`Sidebar-${lang}-${search}`}
+                  />
+                </Sticky>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                <Dimmer active={loading} inverted>
+                  <Loader />
+                </Dimmer>
+                <TplList 
+                  templates={templates} 
+                  refs={refs} 
+                  search={search} 
+                  onPin={this.handleTemplatePin}
+                />
+              </Grid.Column>
+            </Grid>
+          </Ref>
         </Container>
       </React.Fragment>
     );

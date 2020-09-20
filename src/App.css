@@ -32,14 +32,14 @@ code {
 }
 
 .ui.container.wrapper {
-  margin-top: calc(52.1333px + 1em);
+  margin-top: calc(57.2333px + 1em);
   margin-bottom: 2em;
 }
 
-.ui.container.wrapper .ui.grid > [class*="four wide"].column {
+/*.ui.container.wrapper .ui.grid > [class*="four wide"].column {
   position: fixed;
   width: calc(25% - 3.5em) !important;
-}
+}*/
 
 .ui.icon.input > i.disabled.icon {
   display: none;
@@ -51,12 +51,12 @@ code {
   top: 0;
   right: 0;
   left: 0;
-  z-index: 999;
+  z-index: 2000;
 }
 
 .ui.vertical.menu {
   width: 100%;
-  max-height: calc(100vh - 11em);
+  max-height: calc(100vh - 57.2333px - 38px - 3em);
   overflow: auto;
 }
 
