@@ -13,10 +13,16 @@
  */
 
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import { Link, Route, Redirect } from "react-router-dom";
 import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, 
   Dropdown, Dimmer, Button, Popup } from 'semantic-ui-react'
+
+import unified from 'unified'
+import remarkParse from 'remark-parse'
+import remarkAbbr from 'remark-abbr'
+import remarkKbd from 'remark-kbd'
+import remarkReact from 'remark-react'
+
 import './App.css';
 import _ from 'lodash';
 
@@ -188,10 +194,21 @@ const TplList = (props) => {
   );
 
   const TplListContent = ({ md }) => {
-    md = md.replace(/\b(([A-Z])\2\2)\b/g, '**_$1_**');
-    md = md.replace(new RegExp('(' + search + ')', 'i'), '_**$1**_');
+    if (search) md = md.replace(new RegExp('(' + search + ')', 'i'), '||$1||');
+    md += '\n' + _.join(_.map(md.match(/\b(([A-Z])\2\2)\b/g), (m) => {
+      return '*[' + m + ']: need to be replaced';
+    }), '\n');
     
-    return (<ReactMarkdown source={md} className='paragraph' />);
+    return (
+      <p class='paragraph'>{
+        unified()
+          .use(remarkParse)
+          .use(remarkAbbr)
+          .use(remarkKbd)
+          .use(remarkReact)
+          .processSync(md).result
+      }</p>
+    );
   };
 
   return (

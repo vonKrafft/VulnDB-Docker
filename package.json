@@ -12,11 +12,15 @@
     "lodash": "^4.17.20",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-markdown": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "remark-abbr": "^1.4.0",
+    "remark-kbd": "^1.0.21",
+    "remark-parse": "^8.0.3",
+    "remark-react": "^7.0.1",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^1.2.1"
+    "semantic-ui-react": "^1.2.1",
+    "unified": "^9.2.0"
   },
   "scripts": {
     "start:api": "nodes vulndb.js",

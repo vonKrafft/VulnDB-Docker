@@ -116,11 +116,10 @@ code {
   color: #17a2b8;
 }
 
-.ui.segment .paragraph strong > em {
-  background-color: #e3f3e3;
-  color: #083a08;
+.ui.segment .paragraph kbd {
+  background-color: #f6e692;
   font-style: normal;
-  padding: 0 .25em;
+  font-family: inherit;
 }
 
 .ui.segment .paragraph ul > li {
