@@ -32,6 +32,7 @@ export default function App() {
     <React.Fragment>
       <Route path="/" exact render={() => <Redirect to="/home/FR" />} />
       <Route path="/home/:lang" render={renderTplHomePage} />
+      <Route path="/view/:lang/:uuid" render={renderTplHomePage} />
       <Route path="/search/:lang/:text" render={renderTplHomePage} />
     </React.Fragment>
   );
@@ -54,6 +55,7 @@ class TplHomePage extends React.Component {
       search: text || '',
       data: [],
       total: 0,
+      refs: [],
       templates: []
     };
   }
@@ -69,7 +71,11 @@ class TplHomePage extends React.Component {
         this.setState({ 
           loading: false, 
           data: result.data, 
-          total: result.data.length,  
+          total: result.data.length, 
+          refs: _.reduce(result.data, (refs, tpl) => {
+            refs[tpl.uuid] = React.createRef();
+            return refs;
+          }, {}),
           templates: this.filter(result.data, lang, search, uuid) 
         });
       })
@@ -79,7 +85,18 @@ class TplHomePage extends React.Component {
       }));
   }
 
-  filter = (data, lang, search, uuid) => {
+  componentDidUpdate = () => {
+    const { refs, uuid } = this.state;
+    if (uuid !== null) {
+      window.scrollTo({
+        top: refs[uuid].current.offsetTop - 14,
+        behavior: 'smooth'
+      });
+      this.setState({ uuid: null });
+    }
+  }
+
+  filter = (data, lang, search) => {
     return _.sortBy(_.filter(data, (o) => {
       if (!search) return o.language === lang;
       return o.language === lang && o.owasp !== o.title && (
@@ -95,16 +112,16 @@ class TplHomePage extends React.Component {
   }
 
   handleSearchChange = (e, { name, value }) => {
-    const { data, lang, search, uuid } = { ...this.state, [name]: value };
+    const { data, lang, search } = { ...this.state, [name]: value };
     this.setState({ loading: true });
-    const templates = this.filter(data, lang, search, uuid);
+    const templates = this.filter(data, lang, search);
     this.setState({ loading: false, templates: templates, [name]: value });
   }
 
   handleSearchClear = (e) => {
-    const { data, lang, uuid } = this.state;
+    const { data, lang } = this.state;
     this.setState({ loading: true });
-    const templates = this.filter(data, lang, '', uuid);
+    const templates = this.filter(data, lang, '');
     this.setState({ loading: false, templates: templates, search: '' });
   }
 
@@ -119,13 +136,7 @@ class TplHomePage extends React.Component {
   handleAddClick = (e) => {}
 
   render = () => {
-    const { loading, templates, total, search, lang } = this.state;
-
-    const refs = _.reduce(templates, (refs, tpl) => {
-      refs[tpl.uuid] = React.createRef();
-      return refs;
-    }, {});
-    console.log('TplHomePage', refs);
+    const { loading, templates, refs, total, search, lang } = this.state;
 
     return (
       <React.Fragment>
@@ -321,9 +332,8 @@ const TplSidebarMenu = (props) => {
   }, {});
 
   const handleClick = (uuid) => {
-    const itemPositionTop = refs[uuid].current.offsetTop;
-    return window.scrollTo({
-      top: itemPositionTop - 14,
+    window.scrollTo({
+      top: refs[uuid].current.offsetTop - 14,
       behavior: 'smooth'
     });
   }
