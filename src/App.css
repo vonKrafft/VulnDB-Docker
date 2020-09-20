@@ -1,0 +1,97 @@
+* {
+    border-radius: 0 !important;
+}
+
+.ui.container.wrapper {
+    margin-top: 5.21428571em;
+    margin-bottom: 2em;
+}
+
+.ui.container.wrapper .ui.grid > [class*="four wide"].column {
+    position: fixed;
+    width: calc(25% - 3.5em) !important;
+}
+
+.ui.secondary.inverted.menu {
+    background-color: #032343;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.ui.vertical.menu {
+    width: 100%;
+    max-height: calc(100vh - 11em);
+    overflow: auto;
+}
+
+.ui.vertical.menu .item > .header:not(.ui),
+.ui.vertical.menu .menu .item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ui.vertical.menu .menu .item {
+    padding: .1em 0;
+}
+
+.ui.vertical.menu .menu .item > a {
+    background: 0 0;
+    padding: .5em 1.33333333em;
+    color: rgba(0,0,0,.5);
+}
+
+.ui.inline.loader {
+    margin: 5em 0;
+}
+
+.ui.header .sub.header {
+    float: right;
+    font-size: .7em;
+}
+
+.ui.secondary.segment {
+    background-color: #c2d0de;
+}
+
+.ui.segment .paragraph {
+    text-align: justify;
+    margin: 1em 0 0 0;
+    padding: 0;
+}
+
+.ui.segment .paragraph p, 
+.ui.segment .paragraph ul {
+    line-height: 1.5em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.ui.segment .paragraph ul {
+    margin-bottom: 1em;
+}
+
+.ui.segment .paragraph em {
+    color: #17a2b8;
+}
+
+.ui.segment .paragraph strong > em {
+    background-color: #e3f3e3;
+    color: #083a08;
+    font-style: normal;
+    padding: 0 .25em;
+}
+
+.ui.segment .paragraph ul > li {
+    list-style: square;
+}
+
+.ui.segment .paragraph code {
+    font-size: 87.5%;
+    color: #e83e8c;
+    word-break: break-word;
+    line-height: .875em;
+}
