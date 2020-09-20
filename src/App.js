@@ -14,7 +14,7 @@
 
 import React from 'react';
 import { Link, Route, Redirect } from "react-router-dom";
-import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, Ref,
+import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, Ref, List,
   Dropdown, Dimmer, Button, Popup, Label, Sticky } from 'semantic-ui-react'
 
 import unified from 'unified'
@@ -179,6 +179,7 @@ class TplHomePage extends React.Component {
                   search={search} 
                   onPin={this.handleTemplatePin}
                 />
+                <TplFooter />
               </Grid.Column>
             </Grid>
           </Ref>
@@ -373,5 +374,25 @@ const TplSidebarMenu = (props) => {
         </Menu.Item>
       )) }
     </Menu>
+  );
+}
+
+/*****************************************************************************
+ * TplFooter
+ *****************************************************************************/
+
+const TplFooter = (props) => {
+  return (
+    <List floated='right' horizontal size='mini'>
+      <List.Item disabled href='#'>
+        Templates for pentest reports &ndash; <em>Kraffted</em> with &lt;3
+      </List.Item>
+      <List.Item href='//github.com/vonKrafft/VulnDB-Docker' target='_blank'>
+        <Icon name='github' /> Source code
+      </List.Item>
+      <List.Item disabled href='#'>
+        v3.0.0
+      </List.Item>
+    </List>
   );
 }
