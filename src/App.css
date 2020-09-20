@@ -1,106 +1,135 @@
+/*
+Copyright (c) 2020 vonKrafft <contact@vonkrafft.fr>
+
+This file is part of VulnDB.
+
+This file may be used under the terms of the GNU General Public License
+version 3.0 as published by the Free Software Foundation and appearing in
+the file LICENSE included in the packaging of this file. Please review the
+following information to ensure the GNU General Public License version 3.0
+requirements will be met: http://www.gnu.org/copyleft/gpl.html.
+
+This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+  'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
 * {
-    border-radius: 0 !important;
+  border-radius: 0 !important;
 }
 
 .ui.container.wrapper {
-    margin-top: calc(52.1333px + 1em);
-    margin-bottom: 2em;
+  margin-top: calc(52.1333px + 1em);
+  margin-bottom: 2em;
 }
 
 .ui.container.wrapper .ui.grid > [class*="four wide"].column {
-    position: fixed;
-    width: calc(25% - 3.5em) !important;
+  position: fixed;
+  width: calc(25% - 3.5em) !important;
 }
 
 .ui.icon.input > i.icon {
-    right: 2.57142858em;
+  right: 2.57142858em;
 }
 
 .ui.icon.input > i.disabled.icon {
-    display: none;
+  display: none;
 }
 
 .ui.secondary.inverted.menu {
-    background-color: #032343;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 999;
+  background-color: #032343;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 999;
 }
 
 .ui.vertical.menu {
-    width: 100%;
-    max-height: calc(100vh - 11em);
-    overflow: auto;
+  width: 100%;
+  max-height: calc(100vh - 11em);
+  overflow: auto;
 }
 
 .ui.vertical.menu .item > .header:not(.ui),
 .ui.vertical.menu .menu .item {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ui.vertical.menu .menu .item {
-    background: 0 0;
-    padding: .25em 1.33333333em;
-    color: rgba(0,0,0,.5);
+  background: 0 0;
+  padding: .25em 1.33333333em;
+  color: rgba(0,0,0,.5);
 }
 
 .ui.dimmer .ui.loader {
-    top: 0;
-    margin: 5em 0;
+  top: 0;
+  margin: 5em 0;
 }
 
 .ui.header .sub.header {
-    float: right;
-    font-size: .7em;
+  float: right;
+  font-size: .7em;
 }
 
 .ui.segment {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .ui.segment[aria-header="true"] {
-    background-color: #c2d0de;
+  background-color: #c2d0de;
 }
 
 .ui.segment .paragraph {
-    text-align: justify;
-    margin: 1em 0 0 0;
-    padding: 0;
+  text-align: justify;
+  margin: 1em 0 0 0;
+  padding: 0;
 }
 
 .ui.segment .paragraph p, 
 .ui.segment .paragraph ul {
-    line-height: 1.5em;
-    margin-top: 0;
-    margin-bottom: 0;
+  line-height: 1.5em;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .ui.segment .paragraph ul {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 .ui.segment .paragraph em {
-    color: #17a2b8;
+  color: #17a2b8;
 }
 
 .ui.segment .paragraph strong > em {
-    background-color: #e3f3e3;
-    color: #083a08;
-    font-style: normal;
-    padding: 0 .25em;
+  background-color: #e3f3e3;
+  color: #083a08;
+  font-style: normal;
+  padding: 0 .25em;
 }
 
 .ui.segment .paragraph ul > li {
-    list-style: square;
+  list-style: square;
 }
 
 .ui.segment .paragraph code {
-    font-size: 87.5%;
-    color: #e83e8c;
-    word-break: break-word;
-    line-height: .875em;
+  font-size: 87.5%;
+  color: #e83e8c;
+  word-break: break-word;
+  line-height: .875em;
 }
