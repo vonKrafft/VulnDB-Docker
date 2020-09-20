@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Link, Route, Redirect } from "react-router-dom";
-import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, Dropdown, Dimmer, Button, Popup } from 'semantic-ui-react'
+import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, 
+    Dropdown, Dimmer, Button, Popup } from 'semantic-ui-react'
 import './App.css';
 import _ from 'lodash';
 
@@ -25,7 +26,7 @@ class TplHomePage extends React.Component {
         this.state = {
             loading: true,
             lang: lang || 'FR',
-            activeItem: uuid || null,
+            uuid: uuid || null,
             search: text || '',
             data: [],
             total: 0,
@@ -41,7 +42,12 @@ class TplHomePage extends React.Component {
             })
             .then(result => {
                 const { lang, search, uuid } = this.state;
-                this.filterTemplates(result.data, lang, search, uuid);
+                this.setState({ 
+                    loading: false, 
+                    data: result.data, 
+                    total: result.data.length,  
+                    templates: this.filter(result.data, lang, search, uuid) 
+                });
             })
             .catch(error => this.setState({ 
                 loading: false, 
@@ -49,12 +55,8 @@ class TplHomePage extends React.Component {
             }));
     }
 
-    filterTemplates = (data, lang, search, uuid) => {
-        this.setState({ 
-            loading: true 
-        });
-
-        const templates = _.sortBy(_.filter(data, (o) => {
+    filter = (data, lang, search, uuid) => {
+        return _.sortBy(_.filter(data, (o) => {
             if (!search) return o.language === lang;
             return o.language === lang && o.owasp !== o.title && (
                 o.title.toUpperCase().match(search.toUpperCase()) || 
@@ -66,26 +68,20 @@ class TplHomePage extends React.Component {
             (o) => parseInt(o.owasp.replace(/^A([0-9]+):.*$/i, '$1')),
             (o) => o.title
         ]);
-
-        this.setState({ 
-            loading: false, 
-            lang: lang, 
-            search: search, 
-            uuid: uuid, 
-            data: data, 
-            total: data.length, 
-            templates: templates 
-        });
     }
 
     handleSearchChange = (e, { name, value }) => {
         const { data, lang, search, uuid } = { ...this.state, [name]: value };
-        this.filterTemplates(data, lang, search, uuid);
+        this.setState({ loading: true });
+        const templates = this.filter(data, lang, search, uuid);
+        this.setState({ loading: false, templates: templates, [name]: value });
     }
 
     handleSearchClear = (e) => {
         const { data, lang, uuid } = this.state;
-        this.filterTemplates(data, lang, '', uuid);
+        this.setState({ loading: true });
+        const templates = this.filter(data, lang, '', uuid);
+        this.setState({ loading: false, templates: templates, search: '' });
     }
 
     handleSearchSave = (e) => {
@@ -101,52 +97,19 @@ class TplHomePage extends React.Component {
     render = () => {
         const { loading, templates, total, search, lang } = this.state;
 
-        const TplNavbar = () => (
-            <Menu pointing secondary inverted size='huge' className='navbar'>
-                <Container>
-                    <Menu.Item header>VulnDB</Menu.Item>
-                    <Menu.Menu icon position='right'>
-                        <Menu.Item href='/api/export' target='_blank'>
-                            <Icon name='download' />
-                        </Menu.Item>
-                        <Menu.Item onClick={this.handleImportClick}>
-                            <Icon name='upload' />
-                        </Menu.Item>
-                        <Menu.Item onClick={this.handleSatisticsClick}>
-                            <Icon name='line graph' />
-                        </Menu.Item>
-                        <Menu.Item onClick={this.handleAddClick}>
-                            <Icon name='add square' />
-                        </Menu.Item>
-                    </Menu.Menu>
-                </Container>
-            </Menu>
-        );
-
-        const TplItem = ({template}) => (
-            <Segment 
-                ref={React.useRef(template.uuid)} 
-                size='mini' 
-                secondary={template.owasp === template.title}
-            >
-                <Header size='medium'>
-                    {template.title}
-                    <Header.Subheader>{template.owasp}</Header.Subheader>
-                </Header>
-                <TplParagraph markdown={template.description} />
-                <TplParagraph markdown={template.consequences} />
-                <TplParagraph markdown={template.recommendations} />
-            </Segment>
-        );
-
-        const TplParagraph = ({markdown}) => {
-            markdown = markdown.replace(/\b(([A-Z])\2\2)\b/g, '**_$1_**');
-            return (<ReactMarkdown source={markdown} className='paragraph' />);
-        };
+        const refs = _.reduce(templates, (refs, tpl) => {
+            refs[tpl.uuid] = React.createRef();
+            return refs;
+        }, {});
+        console.log('TplHomePage', refs);
 
         return (
             <React.Fragment>
-                <TplNavbar />
+                <TplNavbar 
+                    onImport={this.handleImportClick} 
+                    onSatistics={this.handleSatisticsClick} 
+                    onAdd={this.handleAddClick} 
+                />
                 <Container className='wrapper'>
                     <Grid>
                         <Grid.Column width={4}>
@@ -160,21 +123,88 @@ class TplHomePage extends React.Component {
                             />
                             <TplSidebarMenu 
                                 templates={templates} 
-                                total={total}
+                                total={total} 
+                                refs={refs}
                                 key={`Sidebar-${lang}-${search}`}
                             />
                         </Grid.Column>
                         <Grid.Column width={12} floated='right'>
-                            <Dimmer active={loading} inverted><Loader /></Dimmer>
-                            { _.map(templates, (template) => (
-                                <TplItem template={template} />
-                            )) }
+                            <Dimmer active={loading} inverted>
+                                <Loader />
+                            </Dimmer>
+                            <TplList 
+                                templates={templates} 
+                                refs={refs} 
+                                search={search} 
+                            />
                         </Grid.Column>
                     </Grid>
                 </Container>
             </React.Fragment>
         );
     }
+}
+
+const TplList = (props) => {
+    const { templates, refs, search } = props;
+
+    const TplListItem = ({ tpl, refs }) => (
+        <div
+            key={tpl.uuid} 
+            ref={refs[tpl.uuid]} 
+            class='ui mini segment' 
+            aria-header={tpl.owasp === tpl.title}
+        >
+            <Header size='medium'>
+                {tpl.title}
+                <Header.Subheader>{tpl.owasp}</Header.Subheader>
+            </Header>
+            <TplListContent md={tpl.description} />
+            <TplListContent md={tpl.consequences} />
+            <TplListContent md={tpl.recommendations} />
+        </div>
+    );
+
+    const TplListContent = ({ md }) => {
+        md = md.replace(/\b(([A-Z])\2\2)\b/g, '**_$1_**');
+        md = md.replace(new RegExp('(' + search + ')', 'i'), '_**$1**_');
+        
+        return (<ReactMarkdown source={md} className='paragraph' />);
+    };
+
+    return (
+        <React.Fragment>
+            { _.map(templates, (tpl) => (
+                <TplListItem tpl={tpl} refs={refs} />
+            )) }
+        </React.Fragment>
+    );
+}
+
+const TplNavbar = (props) => {
+    const { onImport, onSatistics, onAdd } = props;
+
+    return (
+        <Menu pointing secondary inverted size='huge' className='navbar'>
+            <Container>
+                <Menu.Item header>VulnDB</Menu.Item>
+                <Menu.Menu icon position='right'>
+                    <Menu.Item href='/api/export' target='_blank'>
+                        <Icon name='download' />
+                    </Menu.Item>
+                    <Menu.Item onClick={onImport}>
+                        <Icon name='upload' />
+                    </Menu.Item>
+                    <Menu.Item onClick={onSatistics}>
+                        <Icon name='line graph' />
+                    </Menu.Item>
+                    <Menu.Item onClick={onAdd}>
+                        <Icon name='add square' />
+                    </Menu.Item>
+                </Menu.Menu>
+            </Container>
+        </Menu>
+    );
 }
 
 const TplSearchInput = (props) => {
@@ -218,7 +248,7 @@ const TplSearchInput = (props) => {
             />} 
         />
     );
-};
+}
 
 const TplSidebarMenu = (props) => {
     const { templates, total } = props;
@@ -239,6 +269,14 @@ const TplSidebarMenu = (props) => {
         return menu;
     }, {});
 
+    const handleClick = (uuid) => {
+        const itemPositionTop = refs[uuid].current.offsetTop;
+        return window.scrollTo({
+            top: itemPositionTop - 14,
+            behavior: 'smooth'
+        });
+    }
+
     return (
         <Menu vertical>
             <Menu.Item>
@@ -250,16 +288,16 @@ const TplSidebarMenu = (props) => {
                 <Menu.Item>
                     <Menu.Header>{menu.category}</Menu.Header>
                     <Menu.Menu>
-                        { _.map(menu.templates, (template) => (
-                            <Menu.Item>
-                                <Link to={`view/${template.uuid}`}>
-                                    {template.title}
-                                </Link>
-                            </Menu.Item>
+                        { _.map(menu.templates, (tpl) => (
+                            <Menu.Item
+                              key={tpl.uuid}
+                              name={tpl.title}
+                              onClick={() => handleClick(tpl.uuid)}
+                            />
                         )) }
                     </Menu.Menu>
                 </Menu.Item>
             )) }
         </Menu>
     );
-};
+}

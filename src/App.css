@@ -3,7 +3,7 @@
 }
 
 .ui.container.wrapper {
-    margin-top: 5.21428571em;
+    margin-top: calc(52.1333px + 1em);
     margin-bottom: 2em;
 }
 
@@ -43,12 +43,8 @@
 }
 
 .ui.vertical.menu .menu .item {
-    padding: .1em 0;
-}
-
-.ui.vertical.menu .menu .item > a {
     background: 0 0;
-    padding: .5em 1.33333333em;
+    padding: .25em 1.33333333em;
     color: rgba(0,0,0,.5);
 }
 
@@ -66,7 +62,7 @@
     margin-top: 0;
 }
 
-.ui.secondary.segment {
+.ui.segment[aria-header="true"] {
     background-color: #c2d0de;
 }
 
