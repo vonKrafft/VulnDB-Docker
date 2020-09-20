@@ -36,6 +36,7 @@ app.listen(PORT, () => {
 const indexFile = path.join(__dirname, 'build', 'index.html');
 app.use(express.static('build'));
 app.get('/', (req, res) => res.sendFile(indexFile));
+app.get('/home/:lang/:search?/:uuid?', (req, res) => res.sendFile(indexFile));
 
 // Root endpoint
 app.get('/api', (req, res) => {

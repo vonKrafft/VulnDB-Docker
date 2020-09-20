@@ -14,7 +14,7 @@
 
 import React from 'react';
 import { Link, Route, Redirect } from "react-router-dom";
-import { Container, Message, Menu, Segment, Header, Grid, Icon, Loader, Input, 
+import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, 
   Dropdown, Dimmer, Button, Popup, Label } from 'semantic-ui-react'
 
 import unified from 'unified'
@@ -30,10 +30,8 @@ export default function App() {
   const renderTplHomePage = (props) => ( <TplHomePage {...props} /> );
   return (
     <React.Fragment>
-      <Route path="/" exact render={() => <Redirect to="/home/FR" />} />
-      <Route path="/home/:lang" render={renderTplHomePage} />
-      <Route path="/view/:lang/:uuid" render={renderTplHomePage} />
-      <Route path="/search/:lang/:text" render={renderTplHomePage} />
+      <Route path="/" exact render={() => <Redirect to="/home/FR//" />} />
+      <Route path="/home/:lang/:search?/:uuid?" render={renderTplHomePage} />
     </React.Fragment>
   );
 }
@@ -46,13 +44,13 @@ class TplHomePage extends React.Component {
   state = {}
 
   constructor(props) {
-    const { lang, uuid, text } = props.match.params;
+    const { lang, uuid, search } = props.match.params;
     super(props);
     this.state = {
       loading: true,
       lang: lang || 'FR',
       uuid: uuid || null,
-      search: text || '',
+      search: decodeURIComponent(search || ''),
       data: [],
       total: 0,
       refs: [],
@@ -116,6 +114,7 @@ class TplHomePage extends React.Component {
     this.setState({ loading: true });
     const templates = this.filter(data, lang, search);
     this.setState({ loading: false, templates: templates, [name]: value });
+    this.props.history.push(`/home/${lang}/${encodeURIComponent(search)}/`);
   }
 
   handleSearchClear = () => {
@@ -123,18 +122,16 @@ class TplHomePage extends React.Component {
     this.setState({ loading: true });
     const templates = this.filter(data, lang, '');
     this.setState({ loading: false, templates: templates, search: '' });
+    this.props.history.push(`/home/${lang}//`);
   }
 
-  handleSearchPin = () => {
-    const { lang, search } = this.state;
-    const path = search ? `/search/${lang}/${search}` : `/home/${lang}`;
-    this.props.history.push(path);
-  }
-
-  handleViewPin = (uuid) => {
-    const { lang } = this.state;
-    const path = `/view/${lang}/${uuid}`;
-    this.props.history.push(path);
+  handleTemplatePin = (uuid) => {
+    const { refs, lang, search } = this.state;
+    this.props.history.push(`/home/${lang}/${encodeURIComponent(search)}/${uuid}`);
+    window.scrollTo({
+      top: refs[uuid].current.offsetTop - 14,
+      behavior: 'smooth'
+    });
   }
 
   handleImportClick = (e) => {}
@@ -160,12 +157,11 @@ class TplHomePage extends React.Component {
                 lang={lang} 
                 onChange={this.handleSearchChange} 
                 onClear={this.handleSearchClear} 
-                onPin={this.handleSearchPin}
               />
               <TplSidebarMenu 
                 templates={templates} 
                 total={total} 
-                refs={refs}
+                onClick={this.handleTemplatePin} 
                 key={`Sidebar-${lang}-${search}`}
               />
             </Grid.Column>
@@ -177,7 +173,7 @@ class TplHomePage extends React.Component {
                 templates={templates} 
                 refs={refs} 
                 search={search} 
-                onPin={this.handleViewPin}
+                onPin={this.handleTemplatePin}
               />
             </Grid.Column>
           </Grid>
@@ -295,7 +291,7 @@ const TplNavbar = (props) => {
  *****************************************************************************/
 
 const TplSearchInput = (props) => {
-  const { search, lang, onChange, onClear, onPin } = props;
+  const { search, lang, onChange, onClear } = props;
 
   const options = [
     { key: 'FR', text: 'FR', value: 'FR' },
@@ -323,16 +319,6 @@ const TplSearchInput = (props) => {
         disabled={!search} 
         onClick={onClear} 
       />} 
-      action={<Popup
-        trigger={<Button 
-          basic 
-          icon='pin' 
-          onClick={onPin} 
-        />}
-        size='mini' 
-        content='Pin the search to share it'
-        position='bottom right'
-      />} 
     />
   );
 }
@@ -342,7 +328,7 @@ const TplSearchInput = (props) => {
  *****************************************************************************/
 
 const TplSidebarMenu = (props) => {
-  const { templates, total, refs } = props;
+  const { templates, total, onClick } = props;
 
   const sidebar =  _(templates).sortBy([
     (o) => parseInt(o.owasp.replace(/^A([0-9]+):.*$/i, '$1')),
@@ -360,13 +346,6 @@ const TplSidebarMenu = (props) => {
     return menu;
   }, {});
 
-  const handleClick = (uuid) => {
-    window.scrollTo({
-      top: refs[uuid].current.offsetTop - 14,
-      behavior: 'smooth'
-    });
-  }
-
   return (
     <Menu vertical>
       <Menu.Item>
@@ -382,7 +361,7 @@ const TplSidebarMenu = (props) => {
               <Menu.Item
                 key={tpl.uuid}
                 name={tpl.title}
-                onClick={() => handleClick(tpl.uuid)}
+                onClick={() => onClick(tpl.uuid)}
               />
             )) }
           </Menu.Menu>

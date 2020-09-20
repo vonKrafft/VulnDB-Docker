@@ -41,10 +41,6 @@ code {
   width: calc(25% - 3.5em) !important;
 }
 
-.ui.icon.input > i.icon {
-  right: 2.57142858em;
-}
-
 .ui.icon.input > i.disabled.icon {
   display: none;
 }
