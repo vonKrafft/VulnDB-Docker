@@ -32,7 +32,7 @@ code {
 }
 
 .ui.container.wrapper {
-  margin-top: calc(57.2333px + 1em);
+  margin-top: calc(48.5666px + 1em);
   margin-bottom: 2em;
 }
 
@@ -49,13 +49,21 @@ code {
   z-index: 2000;
 }
 
+.ui.secondary.pointing.menu .item {
+  padding: .75em .25em;
+}
+
+.ui.secondary.inverted.pointing.menu .header.item {
+  padding: .5em .25em;
+}
+
 .ui.modals.dimmer {
   z-index: 3000;
 }
 
 .ui.vertical.menu {
   width: 100%;
-  max-height: calc(100vh - 57.2333px - 38px - 3em);
+  max-height: calc(100vh - 48.5666px - 38px - 3em);
   overflow: auto;
 }
 

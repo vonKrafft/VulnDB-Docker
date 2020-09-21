@@ -156,7 +156,7 @@ class TplHomePage extends React.Component {
           <Ref innerRef={this.containerRef}>
             <Grid>
               <Grid.Column width={4}>
-                <Sticky context={this.containerRef} offset={71.2333}>
+                <Sticky context={this.containerRef} offset={62.5666}>
                   <Dimmer active={loading} inverted></Dimmer>
                   <TplSearchInput 
                     search={search} 
