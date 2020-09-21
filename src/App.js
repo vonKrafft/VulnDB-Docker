@@ -14,8 +14,10 @@
 
 import React from 'react';
 import { Link, Route, Redirect } from "react-router-dom";
-import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, Ref, List,
-  Dropdown, Dimmer, Button, Popup, Label, Sticky, Segment } from 'semantic-ui-react'
+import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, 
+  Ref, List, Dropdown, Dimmer, Button, Popup, Label, Sticky, Segment, Modal, 
+  Table } from 'semantic-ui-react'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 import unified from 'unified'
 import remarkParse from 'remark-parse'
@@ -140,11 +142,12 @@ class TplHomePage extends React.Component {
   handleAddClick = (e) => {}
 
   render = () => {
-    const { loading, templates, refs, total, search, lang } = this.state;
+    const { loading, data, templates, refs, total, search, lang } = this.state;
 
     return (
       <React.Fragment>
         <TplNavbar 
+          data={data} 
           onImport={this.handleImportClick} 
           onSatistics={this.handleSatisticsClick} 
           onAdd={this.handleAddClick} 
@@ -269,7 +272,7 @@ const TplList = (props) => {
  *****************************************************************************/
 
 const TplNavbar = (props) => {
-  const { onImport, onSatistics, onAdd } = props;
+  const { data, onImport, onAdd } = props;
 
   return (
     <Menu pointing secondary inverted size='huge' className='navbar'>
@@ -282,15 +285,91 @@ const TplNavbar = (props) => {
           <Menu.Item onClick={onImport}>
             <Icon name='upload' />
           </Menu.Item>
-          <Menu.Item onClick={onSatistics}>
-            <Icon name='line graph' />
-          </Menu.Item>
+          <TplMenuItemStatistics data={data} />
           <Menu.Item onClick={onAdd}>
             <Icon name='add square' />
           </Menu.Item>
         </Menu.Menu>
       </Container>
     </Menu>
+  );
+}
+
+/*****************************************************************************
+ * TplMenuItemStatistics
+ *****************************************************************************/
+
+const TplMenuItemStatistics = (props) => {
+  const { data } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const dataChart = _.sortBy(_.reduce(data, (acc, tpl) => {
+    if (! acc[tpl.owasp]) acc[tpl.owasp] = { name: tpl.owasp, total: 0 };
+    if (! acc[tpl.owasp][tpl.language]) {
+      acc[tpl.owasp][tpl.language] = 1;
+    } else {
+      acc[tpl.owasp][tpl.language] += 1;
+    }
+    acc[tpl.owasp].total += 1;
+    return acc;
+  }, {}), [
+    (owasp) => parseInt(owasp.name.replace(/^A([0-9]+):.*$/i, '$1'))
+  ]);
+
+  return (
+    <Modal closeIcon open={open}
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
+      trigger={<Menu.Item><Icon name='line graph' /></Menu.Item>}
+    >
+      <Modal.Header>
+        <Icon name='line graph' /> VulnDB &ndash; Statistics
+      </Modal.Header>
+      <Modal.Content>
+        <BarChart width={858} height={200} data={dataChart} >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis 
+            dataKey="name" 
+            tickFormatter={(tick) => tick.replace(/^(A[0-9:]+).*$/i, '$1')} 
+          />
+          <YAxis />
+          <Tooltip />
+          <Bar dataKey="FR" fill="#17a2b8" />
+          <Bar dataKey="EN" fill="#6c757d" />
+        </BarChart>
+        <Table compact='very'>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>&nbsp;</Table.HeaderCell>
+              <Table.HeaderCell>FR</Table.HeaderCell>
+              <Table.HeaderCell>EN</Table.HeaderCell>
+              <Table.HeaderCell>Total</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            { _.map(dataChart, (owasp) => (
+              <Table.Row>
+                <Table.Cell>{owasp.name}</Table.Cell>
+                <Table.Cell>{owasp.FR || 0}</Table.Cell>
+                <Table.Cell>{owasp.EN || 0}</Table.Cell>
+                <Table.Cell>{(owasp.total || 0)}</Table.Cell>
+              </Table.Row>
+            )) }
+          </Table.Body>
+          <Table.Footer>
+            <Table.Row>
+              <Table.HeaderCell>&nbsp;</Table.HeaderCell>
+              <Table.HeaderCell>{_.sumBy(dataChart, 'FR')}</Table.HeaderCell>
+              <Table.HeaderCell>{_.sumBy(dataChart, 'EN')}</Table.HeaderCell>
+              <Table.HeaderCell>{_.sumBy(dataChart, 'total')}</Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
+        </Table>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={() => setOpen(false)}>Close</Button>
+      </Modal.Actions>
+    </Modal>
   );
 }
 

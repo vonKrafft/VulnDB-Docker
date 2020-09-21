@@ -49,6 +49,10 @@ code {
   z-index: 2000;
 }
 
+.ui.modals.dimmer {
+  z-index: 3000;
+}
+
 .ui.vertical.menu {
   width: 100%;
   max-height: calc(100vh - 57.2333px - 38px - 3em);
