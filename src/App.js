@@ -15,7 +15,7 @@
 import React from 'react';
 import { Link, Route, Redirect } from "react-router-dom";
 import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, Ref, List,
-  Dropdown, Dimmer, Button, Popup, Label, Sticky } from 'semantic-ui-react'
+  Dropdown, Dimmer, Button, Popup, Label, Sticky, Segment } from 'semantic-ui-react'
 
 import unified from 'unified'
 import remarkParse from 'remark-parse'
@@ -197,17 +197,19 @@ const TplList = (props) => {
   const { templates, refs, search, onPin, onEdit } = props;
 
   const TplListItem = ({ tpl, refs }) => (
-    <div
-      key={tpl.uuid} 
-      ref={refs[tpl.uuid]} 
-      class='ui mini segment' 
-      data-header={tpl.owasp === tpl.title}
-    >
-      <TplListHeader tpl={tpl} onPin={onPin} onEdit={onEdit} />
-      <TplListContent md={tpl.description} />
-      <TplListContent md={tpl.consequences} />
-      <TplListContent md={tpl.recommendations} />
-    </div>
+    <Ref innerRef={refs[tpl.uuid]}>
+      <Segment
+        key={tpl.uuid} 
+        ref={refs[tpl.uuid]} 
+        size='mini' 
+        secondary={tpl.owasp === tpl.title}
+      >
+        <TplListHeader tpl={tpl} onPin={onPin} onEdit={onEdit} />
+        <TplListContent md={tpl.description} />
+        <TplListContent md={tpl.consequences} />
+        <TplListContent md={tpl.recommendations} />
+      </Segment>
+    </Ref>
   );
 
   const TplListHeader= ({ tpl, onPin, onEdit }) => {    

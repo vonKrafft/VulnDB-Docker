@@ -36,11 +36,6 @@ code {
   margin-bottom: 2em;
 }
 
-/*.ui.container.wrapper .ui.grid > [class*="four wide"].column {
-  position: fixed;
-  width: calc(25% - 3.5em) !important;
-}*/
-
 .ui.icon.input > i.disabled.icon {
   display: none;
 }
@@ -87,7 +82,7 @@ code {
   margin-top: 0;
 }
 
-.ui.segment[data-header="true"] {
+.ui.secondary.segment {
   background-color: #c2d0de;
 }
 
