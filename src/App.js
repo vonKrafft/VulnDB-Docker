@@ -85,7 +85,7 @@ class TplHomePage extends React.Component {
         else throw new Error(); 
       })
       .then(({ status, data }) => {
-        const { lang, search, uuid } = this.state;
+        const { lang, search } = this.state;
         this.setState({ 
           loading: false, 
           data: data, 
@@ -376,7 +376,6 @@ class TplItemModal extends React.Component {
   }
 
   handleClose = () => {
-    const { uuid } = this.state;
     this.setState({ open: false });
   }
 
