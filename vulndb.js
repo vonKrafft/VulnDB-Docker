@@ -24,6 +24,11 @@ const fs = require('fs');
 const DATABASE = process.env.DATABASE || 'vulndb.json';
 const PORT = process.env.PORT || 5000;
 
+// Initialize database
+if(! fs.existsSync(DATABASE)) {
+  fs.writeFileSync(DATABASE, JSON.stringify([]));
+}
+
 // Create express app
 let app = express();
 app.use(cors());

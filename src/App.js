@@ -584,34 +584,26 @@ const TplNavbar = (props) => {
             position='bottom right'
           />
           <Popup
-            trigger={<Menu.Item onClick={onImport}>
-              <Icon name='upload' />
-            </Menu.Item>}
-            size='mini' 
-            content='Import templates'
-            position='bottom right'
-          />
-          <TplItemStatistics 
-            data={data} 
-            trigger={<Popup
+            trigger={<TplItemStatistics 
+              data={data} 
               trigger={<Menu.Item>
                 <Icon name='line graph' />
               </Menu.Item>}
-              size='mini' 
-              content='Statistics'
-              position='bottom right'
             />}
+            size='mini' 
+            content='Statistics'
+            position='bottom right'
           />
-          <TplItemModal
-            trigger={<Popup
+          <Popup
+            trigger={<TplItemModal
               trigger={<Menu.Item>
                 <Icon name='add square' />
               </Menu.Item>}
-              size='mini' 
-              content='New template'
-              position='bottom right'
+              onUpdate={onUpdate}
             />}
-            onUpdate={onUpdate}
+            size='mini' 
+            content='New template'
+            position='bottom right'
           />
         </Menu.Menu>
       </Container>
