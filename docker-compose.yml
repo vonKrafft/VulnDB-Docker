@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+    node-vulndb:
+        build: .
+        image: vonkrafft/node-vulndb
+        container_name: node-vulndb
+        volumes:
+            - ./vulndb.json:/home/node/app/vulndb.json
+        ports:
+            - 80:5000
