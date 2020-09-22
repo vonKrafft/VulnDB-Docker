@@ -33,7 +33,7 @@ export default function App() {
   return (
     <React.Fragment>
       <Route path="/" exact render={() => <Redirect to="/home/FR//" />} />
-      <Route path="/home/:lang/:search?/:uuid?" render={renderTplHomePage} />
+      <Route path="/home/:lang/:action?/:param?" render={renderTplHomePage} />
     </React.Fragment>
   );
 }
@@ -46,13 +46,13 @@ class TplHomePage extends React.Component {
   state = {}
 
   constructor(props) {
-    const { lang, uuid, search } = props.match.params;
+    const { lang, action, param } = props.match.params;
     super(props);
     this.state = {
       loading: true,
       lang: lang || 'FR',
-      uuid: uuid || null,
-      search: decodeURIComponent(search || ''),
+      uuidView: action === 'view' ? (param || null) : null,
+      search: action === 'search' ? decodeURIComponent(param || '') : '',
       data: [],
       total: 0,
       refs: [],
@@ -87,13 +87,13 @@ class TplHomePage extends React.Component {
   }
 
   componentDidUpdate = () => {
-    const { refs, uuid } = this.state;
-    if (uuid !== null) {
+    const { refs, uuidView } = this.state;
+    if (uuidView !== null) {
       window.scrollTo({
-        top: refs[uuid].current.offsetTop - 14,
+        top: refs[uuidView].current.offsetTop - 14,
         behavior: 'smooth'
       });
-      this.setState({ uuid: null });
+      this.setState({ uuidView: null });
     }
   }
 
@@ -108,10 +108,8 @@ class TplHomePage extends React.Component {
         refs[tpl.uuid] = React.createRef();
         return refs;
       }, {}),
-      uuid: tpl.uuid,
       templates: this.filter(newData, tpl.language, '') 
-    });
-    this.props.history.push(`/home/${tpl.language}//${tpl.uuid}`);
+    }, this.handleTemplatePin(tpl.uuid));
   }
 
   filter = (data, lang, search) => {
@@ -134,7 +132,7 @@ class TplHomePage extends React.Component {
     this.setState({ loading: true });
     const templates = this.filter(data, lang, search);
     this.setState({ loading: false, templates: templates, [name]: value });
-    this.props.history.push(`/home/${lang}/${encodeURIComponent(search)}/`);
+    this.props.history.push(`/home/${lang}/search/${encodeURIComponent(search)}`);
   }
 
   handleSearchClear = () => {
@@ -142,12 +140,12 @@ class TplHomePage extends React.Component {
     this.setState({ loading: true });
     const templates = this.filter(data, lang, '');
     this.setState({ loading: false, templates: templates, search: '' });
-    this.props.history.push(`/home/${lang}//`);
+    this.props.history.push(`/home/${lang}`);
   }
 
   handleTemplatePin = (uuid) => {
-    const { refs, lang, search } = this.state;
-    this.props.history.push(`/home/${lang}/${encodeURIComponent(search)}/${uuid}`);
+    const { refs, lang } = this.state;
+    this.props.history.push(`/home/${lang}/view/${uuid}`);
     window.scrollTo({
       top: refs[uuid].current.offsetTop - 14,
       behavior: 'smooth'
@@ -212,9 +210,9 @@ class TplHomePage extends React.Component {
  *****************************************************************************/
  
 const TplList = (props) => {
-  const { templates, refs, search, onPin, onEdit, onUpdate } = props;
+  const { templates, refs, search, onPin, onUpdate } = props;
 
-  const TplListItem = ({ tpl, refs }) => (
+  const TplListItem = ({ tpl }) => (
     <Ref innerRef={refs[tpl.uuid]}>
       <Segment
         key={tpl.uuid} 
@@ -222,12 +220,7 @@ const TplList = (props) => {
         size='mini' 
         secondary={tpl.owasp === tpl.title}
       >
-        <TplListHeader 
-          tpl={tpl} 
-          onPin={onPin} 
-          onEdit={onEdit} 
-          onUpdate={onUpdate} 
-        />
+        <TplListHeader tpl={tpl} />
         <TplListContent md={tpl.description} />
         <TplListContent md={tpl.consequences} />
         <TplListContent md={tpl.recommendations} />
@@ -235,7 +228,7 @@ const TplList = (props) => {
     </Ref>
   );
 
-  const TplListHeader= ({ tpl, onPin, onEdit, onUpdate }) => {    
+  const TplListHeader= ({ tpl }) => {    
     return (
       <Header>
         {tpl.title}
@@ -291,7 +284,7 @@ const TplList = (props) => {
   return (
     <React.Fragment>
       { _.map(templates, (tpl) => (
-        <TplListItem tpl={tpl} refs={refs} />
+        <TplListItem tpl={tpl} />
       )) }
     </React.Fragment>
   );
@@ -356,6 +349,7 @@ class TplItemModal extends React.Component {
   }
 
   handleClose = () => {
+    const { uuid } = this.state;
     this.setState({ open: false });
   }
 
