@@ -64,6 +64,21 @@ class TplHomePage extends React.Component {
   }
 
   componentDidMount = () => {
+    this.fetchTemplates(() => {});
+  }
+
+  componentDidUpdate = () => {
+    const { refs, uuidView } = this.state;
+    if (uuidView !== null) {
+      window.scrollTo({
+        top: refs[uuidView].current.offsetTop - 14,
+        behavior: 'smooth'
+      });
+      this.setState({ uuidView: null });
+    }
+  }
+
+  fetchTemplates = (callback) => {
     fetch('/api/templates')
       .then((response) => { 
         if (response.status < 400) return response.json(); 
@@ -85,48 +100,19 @@ class TplHomePage extends React.Component {
       .catch(error => this.setState({ 
         loading: false, 
         error 
-      }));
+      }))
+      .finally(callback);
   }
 
-  componentDidUpdate = () => {
-    const { refs, uuidView } = this.state;
-    if (uuidView !== null) {
-      window.scrollTo({
-        top: refs[uuidView].current.offsetTop - 14,
-        behavior: 'smooth'
-      });
-      this.setState({ uuidView: null });
-    }
-  }
-
-  handleUpdate = (tpl) => {
-    const { data } = this.state;
-    const newData = _.uniqBy([tpl, ...data], 'uuid');
-    this.setState({ 
-      loading: false, 
-      data: newData, 
-      total: newData.length, 
-      refs: _.reduce(newData, (refs, tpl) => {
-        refs[tpl.uuid] = React.createRef();
-        return refs;
-      }, {}),
-      templates: this.filter(newData, tpl.language, '') 
-    }, this.handleMenuClick(tpl.uuid));
-  }
-
-  handleDelete = (uuid) => {
-    const { data, lang } = this.state;
-    const newData = _.filter(data, (o) => o.uuid !== uuid);
-    this.setState({ 
-      loading: false, 
-      data: newData, 
-      total: newData.length, 
-      refs: _.reduce(newData, (refs, tpl) => {
-        refs[tpl.uuid] = React.createRef();
-        return refs;
-      }, {}),
-      templates: this.filter(newData, lang, '') 
-    }, this.props.history.push(`/home/${lang}`));
+  reloadTemplates = (uuid) => {
+    this.fetchTemplates(() => {
+      if (uuid) {
+        this.handleMenuClick(uuid);
+      } else {
+        const { lang } = this.state;
+        this.props.history.push(`/home/${lang}`)
+      }
+    });
   }
 
   filter = (data, lang, search) => {
@@ -181,8 +167,7 @@ class TplHomePage extends React.Component {
       <React.Fragment>
         <TplNavbar 
           data={data} 
-          onImport={this.handleImportClick} 
-          onUpdate={this.handleUpdate}
+          reload={this.reloadTemplates}
         />
         <Container className='wrapper'>
           <Ref innerRef={this.containerRef}>
@@ -212,8 +197,7 @@ class TplHomePage extends React.Component {
                   templates={templates} 
                   refs={refs} 
                   search={search} 
-                  onUpdate={this.handleUpdate}
-                  onDelete={this.handleDelete}
+                  reload={this.reloadTemplates}
                 />
                 <TplFooter />
               </Grid.Column>
@@ -230,7 +214,7 @@ class TplHomePage extends React.Component {
  *****************************************************************************/
  
 const TplList = (props) => {
-  const { templates, refs, search, onUpdate, onDelete } = props;
+  const { templates, refs, search, reload } = props;
 
   const TplListItem = ({ tpl }) => (
     <Ref innerRef={refs[tpl.uuid]}>
@@ -261,8 +245,7 @@ const TplList = (props) => {
             content='Edit' 
             icon='edit outline' 
           />}
-          onUpdate={onUpdate}
-          onDelete={onDelete}
+          reload={reload}
         />
         <TplPermalink uuid={tpl.uuid} lang={tpl.language} />
         <Header.Subheader>
@@ -347,8 +330,7 @@ class TplItemModal extends React.Component {
       uuid: props.uuid || null,
       template: { language: 'FR' },
       trigger: props.trigger,
-      onUpdate: props.onUpdate || ((tpl) => {}),
-      onDelete: props.onDelete || ((uuid) => {}),
+      reload: props.reload || ((uuid) => {}),
       topTenOwasp: _.map([
         'A1:2017 - Injection',
         'A2:2017 - Broken Authentication',
@@ -411,7 +393,7 @@ class TplItemModal extends React.Component {
   }
 
   handleSave = () => {
-    const { uuid, template, onUpdate } = this.state;
+    const { uuid, template, reload } = this.state;
 
     let required = [];
     if (! template.title) required.push('title');
@@ -436,13 +418,13 @@ class TplItemModal extends React.Component {
         if (response.status < 400) return response.json(); 
         else throw new Error(); 
       })
-      .then(({ status, data }) => onUpdate(data))
+      .then(({ status, data }) => reload(data.uuid))
       .catch((error) => {})
       .finally(() => this.setState({ open: false }));
   }
 
   handleDelete = () => {
-    const { confirm, uuid, onDelete } = this.state;
+    const { confirm, uuid, reload } = this.state;
 
     if ( confirm !== 'DELETE' ) {
       return this.setState({ confirmError: true });
@@ -455,7 +437,7 @@ class TplItemModal extends React.Component {
         if (response.status < 400) return response.json(); 
         else throw new Error(); 
       })
-      .then(({ status }) => onDelete(uuid))
+      .then(({ status }) => reload(uuid))
       .catch((error) => {})
       .finally(() => this.setState({ open: false }));
   }
@@ -581,7 +563,7 @@ class TplItemModal extends React.Component {
  *****************************************************************************/
 
 const TplNavbar = (props) => {
-  const { data, onImport, onUpdate } = props;
+  const { data, reload } = props;
 
   return (
     <Menu pointing secondary inverted size='huge' className='navbar'>
@@ -612,7 +594,7 @@ const TplNavbar = (props) => {
               trigger={<Menu.Item>
                 <Icon name='add square' />
               </Menu.Item>}
-              onUpdate={onUpdate}
+              reload={reload}
             />}
             size='mini' 
             content='New template'
