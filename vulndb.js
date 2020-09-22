@@ -94,11 +94,12 @@ app.post('/api/template', (req, res) => {
  * PUT <API_URL>/template/:uuid
  *****************************************************************************/
 
-app.get('/api/template/:uuid', (req, res) => {
+app.put('/api/template/:uuid', (req, res) => {
   let data = JSON.parse(fs.readFileSync(DATABASE));
   const template = data.find(o => o.uuid === req.params.uuid);
   if (template) {
     const index = data.indexOf(template);
+    req.body.uuid = req.params.uuid;
     for (const [key, value] of Object.entries(req.body)) {
       if (key in template) { template[key] = value };
     }
@@ -115,7 +116,7 @@ app.get('/api/template/:uuid', (req, res) => {
  * DELETE <API_URL>/template/:uuid
  *****************************************************************************/
 
-app.get('/api/template/:uuid', (req, res) => {
+app.delete('/api/template/:uuid', (req, res) => {
   let data = JSON.parse(fs.readFileSync(DATABASE));
   const template = data.find(o => o.uuid === req.params.uuid);
   if (template) {
