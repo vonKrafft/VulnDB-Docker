@@ -32,8 +32,8 @@ code {
 }
 
 .ui.container.wrapper {
-  margin-top: calc(48.5666px + 1em);
-  margin-bottom: 2em;
+  padding-top: calc(48.5666px + 1em);
+  padding-bottom: 2em;
 }
 
 .ui.icon.input > i.disabled.icon {
@@ -122,14 +122,21 @@ code {
 }
 
 .ui.segment .paragraph p, 
+.ui.segment .paragraph ol, 
 .ui.segment .paragraph ul {
   line-height: 1.5em;
   margin-top: 0;
   margin-bottom: 0;
 }
 
+.ui.segment .paragraph ol, 
 .ui.segment .paragraph ul {
   margin-bottom: 1em;
+}
+
+.ui.segment .paragraph li ol, 
+.ui.segment .paragraph li ul {
+  margin-bottom: 0;
 }
 
 .ui.segment .paragraph em {
