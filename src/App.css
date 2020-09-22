@@ -176,6 +176,7 @@ code {
   background-color: rgb(3, 35, 67);
 }
 
+.ui.primary.button:focus, .ui.primary.buttons .button:focus, 
 .ui.primary.button:hover, .ui.primary.buttons .button:hover {
   background-color: rgba(3, 35, 67, .85);
 }

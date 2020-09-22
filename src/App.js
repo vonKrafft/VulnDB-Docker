@@ -345,7 +345,7 @@ class TplItemModal extends React.Component {
       open: false,
       loading: true,
       uuid: props.uuid || null,
-      template: {},
+      template: { language: 'FR' },
       trigger: props.trigger,
       onUpdate: props.onUpdate || ((tpl) => {}),
       onDelete: props.onDelete || ((uuid) => {}),
@@ -361,6 +361,7 @@ class TplItemModal extends React.Component {
         'A9:2017 - Using Components with Known Vulnerabilities',
         'A10:2017 - Insufficient Logging &amp; Monitoring'
       ], (v) => { return { key: v, value: v, text: v }; }),
+      required: [],
       confirm: '',
       confirmError: false
     };
@@ -412,6 +413,16 @@ class TplItemModal extends React.Component {
   handleSave = () => {
     const { uuid, template, onUpdate } = this.state;
 
+    let required = [];
+    if (! template.title) required.push('title');
+    if (! template.owasp) required.push('owasp');
+
+    if (required.length > 0) {
+      return this.setState({
+        required: required
+      });
+    }
+
     const options = {
       method: uuid ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -450,7 +461,7 @@ class TplItemModal extends React.Component {
   }
 
   render = () => {
-    const { error, open, loading, uuid, confirm, confirmError, 
+    const { error, open, loading, uuid, confirm, confirmError, required, 
       template, trigger, topTenOwasp } = this.state;
 
     const freeze = loading || error !== null;
@@ -479,6 +490,7 @@ class TplItemModal extends React.Component {
               size='huge' 
               onChange={this.handleChange} 
               disabled={error !== null}
+              error={_.indexOf(required, 'title') >= 0}
             />
             <Form.Group unstackable>
               <Form.Dropdown 
@@ -490,6 +502,7 @@ class TplItemModal extends React.Component {
                 width={14} 
                 onChange={this.handleChange} 
                 disabled={error !== null}
+                error={_.indexOf(required, 'owasp') >= 0}
               />
               <Form.Radio 
                 label='FR' 
