@@ -19,6 +19,8 @@ import { Container, Message, Menu, Header, Grid, Icon, Loader, Input,
   Table, Form } from 'semantic-ui-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
+import clipboard from 'copy-to-clipboard'
+
 import unified from 'unified'
 import remarkParse from 'remark-parse'
 import remarkAbbr from 'remark-abbr'
@@ -109,7 +111,7 @@ class TplHomePage extends React.Component {
         return refs;
       }, {}),
       templates: this.filter(newData, tpl.language, '') 
-    }, this.handleTemplatePin(tpl.uuid));
+    }, this.handleMenuClick(tpl.uuid));
   }
 
   filter = (data, lang, search) => {
@@ -143,7 +145,7 @@ class TplHomePage extends React.Component {
     this.props.history.push(`/home/${lang}`);
   }
 
-  handleTemplatePin = (uuid) => {
+  handleMenuClick = (uuid) => {
     const { refs, lang } = this.state;
     this.props.history.push(`/home/${lang}/view/${uuid}`);
     window.scrollTo({
@@ -179,7 +181,7 @@ class TplHomePage extends React.Component {
                   <TplSidebarMenu 
                     templates={templates} 
                     total={total} 
-                    onClick={this.handleTemplatePin} 
+                    onClick={this.handleMenuClick} 
                     key={`Sidebar-${lang}-${search}`}
                   />
                 </Sticky>
@@ -192,7 +194,6 @@ class TplHomePage extends React.Component {
                   templates={templates} 
                   refs={refs} 
                   search={search} 
-                  onPin={this.handleTemplatePin}
                   onUpdate={this.handleUpdate}
                 />
                 <TplFooter />
@@ -210,7 +211,7 @@ class TplHomePage extends React.Component {
  *****************************************************************************/
  
 const TplList = (props) => {
-  const { templates, refs, search, onPin, onUpdate } = props;
+  const { templates, refs, search, onUpdate } = props;
 
   const TplListItem = ({ tpl }) => (
     <Ref innerRef={refs[tpl.uuid]}>
@@ -228,7 +229,7 @@ const TplList = (props) => {
     </Ref>
   );
 
-  const TplListHeader= ({ tpl }) => {    
+  const TplListHeader= ({ tpl }) => {
     return (
       <Header>
         {tpl.title}
@@ -243,23 +244,42 @@ const TplList = (props) => {
           />}
           onUpdate={onUpdate}
         />
-        <Popup
-          trigger={<Label 
-            as='a' 
-            basic 
-            size='mini' 
-            icon='pin' 
-            empty 
-            onClick={() => onPin(tpl.uuid)}
-          />}
-          size='mini' 
-          content='Pin the template to share it'
-          position='bottom right'
-        />
+        <TplPermalink uuid={tpl.uuid} lang={tpl.language} />
         <Header.Subheader>
           {tpl.owasp}
         </Header.Subheader>
       </Header>
+    );
+  };
+
+  const TplPermalink = ({ lang, uuid }) => {
+    const [ open, setOpen ] = React.useState(false);
+    const [ content, setContent ] = React.useState('Copy permalink');
+
+    if (content === 'Copied!') {
+      clipboard(window.location.origin + `/home/${lang}/view/${uuid}`);
+      setTimeout(() => {
+        setContent('Copy permalink');
+      }, 500);
+    }
+    
+    return (
+      <Popup
+        trigger={<Label 
+          as='a' 
+          basic 
+          size='mini' 
+          icon='linkify' 
+          empty 
+          onClick={() => setContent('Copied!')} 
+        />}
+        size='mini' 
+        content={content}
+        position='bottom left' 
+        open={open || (content === 'Copied!')}
+        onClose={() => setOpen(false)} 
+        onOpen={() => setOpen(true)} 
+      />
     );
   };
 
@@ -362,7 +382,6 @@ class TplItemModal extends React.Component {
 
   handleSave = () => {
     const { uuid, template, onUpdate } = this.state;
-    console.log(this.state.template);
     this.setState({ open: false });
 
     const options = {
