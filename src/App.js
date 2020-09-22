@@ -506,7 +506,12 @@ const TplNavbar = (props) => {
           <Menu.Item onClick={onImport}>
             <Icon name='upload' />
           </Menu.Item>
-          <TplMenuItemStatistics data={data} />
+          <TplItemStatistics 
+            data={data} 
+            trigger={<Menu.Item>
+              <Icon name='line graph' />
+            </Menu.Item>}
+          />
           <TplItemModal
             trigger={<Menu.Item>
               <Icon name='add square' />
@@ -544,7 +549,7 @@ const TplItemStatistics = (props) => {
     <Modal closeIcon open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
-      trigger={<Menu.Item><Icon name='line graph' /></Menu.Item>}
+      trigger={trigger}
     >
       <Modal.Header>
         <Icon name='line graph' /> VulnDB &ndash; Statistics
