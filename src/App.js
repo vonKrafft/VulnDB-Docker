@@ -34,7 +34,7 @@ export default function App() {
   const renderTplHomePage = (props) => ( <TplHomePage {...props} /> );
   return (
     <React.Fragment>
-      <Route path="/" exact render={() => <Redirect to="/home/FR//" />} />
+      <Route path="/" exact render={() => <Redirect to="/home/FR" />} />
       <Route path="/home/:lang/:action?/:param?" render={renderTplHomePage} />
     </React.Fragment>
   );
@@ -115,13 +115,16 @@ class TplHomePage extends React.Component {
   }
 
   filter = (data, lang, search) => {
+    const match = (haystack, needle) => {
+      return haystack && haystack.toUpperCase().match(needle.toUpperCase());
+    }
     return _.sortBy(_.filter(data, (o) => {
       if (!search) return o.language === lang;
       return o.language === lang && o.owasp !== o.title && (
-        (o.title && o.title.toUpperCase().match(search.toUpperCase())) || 
-        (o.description && o.description.toUpperCase().match(search.toUpperCase())) || 
-        (o.consequences && o.consequences.toUpperCase().match(search.toUpperCase())) || 
-        (o.recommendations && o.recommendations.toUpperCase().match(search.toUpperCase())) 
+        match(o.title, search) || 
+        match(o.description, search) || 
+        match(o.consequences, search) || 
+        match(o.recommendations, search) 
       );
     }), [
       (o) => parseInt(o.owasp.replace(/^A([0-9]+):.*$/i, '$1')),
