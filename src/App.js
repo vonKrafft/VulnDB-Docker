@@ -63,21 +63,21 @@ class TplHomePage extends React.Component {
 
   componentDidMount = () => {
     fetch('/api/templates')
-      .then(response => { 
+      .then((response) => { 
         if (response.status < 400) return response.json(); 
         else throw new Error(); 
       })
-      .then(result => {
+      .then(({ status, data }) => {
         const { lang, search, uuid } = this.state;
         this.setState({ 
           loading: false, 
-          data: result.data, 
-          total: result.data.length, 
-          refs: _.reduce(result.data, (refs, tpl) => {
+          data: data, 
+          total: data.length, 
+          refs: _.reduce(data, (refs, tpl) => {
             refs[tpl.uuid] = React.createRef();
             return refs;
           }, {}),
-          templates: this.filter(result.data, lang, search, uuid) 
+          templates: this.filter(data, lang, search) 
         });
       })
       .catch(error => this.setState({ 
