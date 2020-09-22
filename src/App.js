@@ -516,23 +516,43 @@ const TplNavbar = (props) => {
     <Menu pointing secondary inverted size='huge' className='navbar'>
       <Container>
         <Menu.Item header><Link to='/'>VulnDB</Link></Menu.Item>
-        <Menu.Menu icon position='right'>
-          <Menu.Item href='/api/export' target='_blank'>
-            <Icon name='download' />
-          </Menu.Item>
-          <Menu.Item onClick={onImport}>
-            <Icon name='upload' />
-          </Menu.Item>
+        <Menu.Menu position='right'>
+          <Popup
+            trigger={<Menu.Item href='/api/export' target='_blank'>
+              <Icon name='download' />
+            </Menu.Item>}
+            size='mini' 
+            content='Export templates'
+            position='bottom right'
+          />
+          <Popup
+            trigger={<Menu.Item onClick={onImport}>
+              <Icon name='upload' />
+            </Menu.Item>}
+            size='mini' 
+            content='Import templates'
+            position='bottom right'
+          />
           <TplItemStatistics 
             data={data} 
-            trigger={<Menu.Item>
-              <Icon name='line graph' />
-            </Menu.Item>}
+            trigger={<Popup
+              trigger={<Menu.Item>
+                <Icon name='line graph' />
+              </Menu.Item>}
+              size='mini' 
+              content='Statistics'
+              position='bottom right'
+            />}
           />
           <TplItemModal
-            trigger={<Menu.Item>
-              <Icon name='add square' />
-            </Menu.Item>}
+            trigger={<Popup
+              trigger={<Menu.Item>
+                <Icon name='add square' />
+              </Menu.Item>}
+              size='mini' 
+              content='New template'
+              position='bottom right'
+            />}
             onUpdate={onUpdate}
           />
         </Menu.Menu>
