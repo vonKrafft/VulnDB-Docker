@@ -116,10 +116,10 @@ class TplHomePage extends React.Component {
     return _.sortBy(_.filter(data, (o) => {
       if (!search) return o.language === lang;
       return o.language === lang && o.owasp !== o.title && (
-        o.title.toUpperCase().match(search.toUpperCase()) || 
-        o.description.toUpperCase().match(search.toUpperCase()) || 
-        o.consequences.toUpperCase().match(search.toUpperCase()) || 
-        o.recommendations.toUpperCase().match(search.toUpperCase()) 
+        (o.title && o.title.toUpperCase().match(search.toUpperCase())) || 
+        (o.description && o.description.toUpperCase().match(search.toUpperCase())) || 
+        (o.consequences && o.consequences.toUpperCase().match(search.toUpperCase())) || 
+        (o.recommendations && o.recommendations.toUpperCase().match(search.toUpperCase())) 
       );
     }), [
       (o) => parseInt(o.owasp.replace(/^A([0-9]+):.*$/i, '$1')),
@@ -264,6 +264,7 @@ const TplList = (props) => {
   };
 
   const TplListContent = ({ md }) => {
+    if (md === null) md = '';
     if (search) md = md.replace(new RegExp('(' + search + ')', 'i'), '||$1||');
     md += '\n' + _.join(_.map(md.match(/\b(([A-Z])\2\2)\b/g), (m) => {
       return '*[' + m + ']: need to be replaced';
