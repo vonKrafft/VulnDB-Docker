@@ -16,7 +16,7 @@ import React from 'react';
 import { Link, Route, Redirect } from "react-router-dom";
 import { Container, Message, Menu, Header, Grid, Icon, Loader, Input, 
   Ref, List, Dropdown, Dimmer, Button, Popup, Label, Sticky, Segment, Modal, 
-  Table } from 'semantic-ui-react'
+  Table, Form } from 'semantic-ui-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 import unified from 'unified'
@@ -97,6 +97,23 @@ class TplHomePage extends React.Component {
     }
   }
 
+  handleUpdate = (tpl) => {
+    const { data } = this.state;
+    const newData = _.uniqBy([tpl, ...data], 'uuid');
+    this.setState({ 
+      loading: false, 
+      data: newData, 
+      total: newData.length, 
+      refs: _.reduce(newData, (refs, tpl) => {
+        refs[tpl.uuid] = React.createRef();
+        return refs;
+      }, {}),
+      uuid: tpl.uuid,
+      templates: this.filter(newData, tpl.language, '') 
+    });
+    this.props.history.push(`/home/${tpl.language}//${tpl.uuid}`);
+  }
+
   filter = (data, lang, search) => {
     return _.sortBy(_.filter(data, (o) => {
       if (!search) return o.language === lang;
@@ -138,8 +155,6 @@ class TplHomePage extends React.Component {
   }
 
   handleImportClick = (e) => {}
-  handleSatisticsClick = (e) => {}
-  handleAddClick = (e) => {}
 
   render = () => {
     const { loading, data, templates, refs, total, search, lang } = this.state;
@@ -149,8 +164,7 @@ class TplHomePage extends React.Component {
         <TplNavbar 
           data={data} 
           onImport={this.handleImportClick} 
-          onSatistics={this.handleSatisticsClick} 
-          onAdd={this.handleAddClick} 
+          onUpdate={this.handleUpdate}
         />
         <Container className='wrapper'>
           <Ref innerRef={this.containerRef}>
@@ -181,6 +195,7 @@ class TplHomePage extends React.Component {
                   refs={refs} 
                   search={search} 
                   onPin={this.handleTemplatePin}
+                  onUpdate={this.handleUpdate}
                 />
                 <TplFooter />
               </Grid.Column>
@@ -197,7 +212,7 @@ class TplHomePage extends React.Component {
  *****************************************************************************/
  
 const TplList = (props) => {
-  const { templates, refs, search, onPin, onEdit } = props;
+  const { templates, refs, search, onPin, onEdit, onUpdate } = props;
 
   const TplListItem = ({ tpl, refs }) => (
     <Ref innerRef={refs[tpl.uuid]}>
@@ -207,7 +222,12 @@ const TplList = (props) => {
         size='mini' 
         secondary={tpl.owasp === tpl.title}
       >
-        <TplListHeader tpl={tpl} onPin={onPin} onEdit={onEdit} />
+        <TplListHeader 
+          tpl={tpl} 
+          onPin={onPin} 
+          onEdit={onEdit} 
+          onUpdate={onUpdate} 
+        />
         <TplListContent md={tpl.description} />
         <TplListContent md={tpl.consequences} />
         <TplListContent md={tpl.recommendations} />
@@ -215,11 +235,21 @@ const TplList = (props) => {
     </Ref>
   );
 
-  const TplListHeader= ({ tpl, onPin, onEdit }) => {    
+  const TplListHeader= ({ tpl, onPin, onEdit, onUpdate }) => {    
     return (
       <Header>
         {tpl.title}
-        <Label basic as='a' size='mini' content='Edit' icon='edit outline' />
+        <TplItemModal
+          uuid={tpl.uuid}
+          trigger={<Label 
+            as='a' 
+            basic 
+            size='mini' 
+            content='Edit' 
+            icon='edit outline' 
+          />}
+          onUpdate={onUpdate}
+        />
         <Popup
           trigger={<Label 
             as='a' 
@@ -268,11 +298,202 @@ const TplList = (props) => {
 }
 
 /*****************************************************************************
+ * TplItemModal
+ *****************************************************************************/
+
+class TplItemModal extends React.Component {
+  state = {}
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null,
+      open: false,
+      loading: true,
+      uuid: props.uuid || null,
+      template: {},
+      trigger: props.trigger,
+      onUpdate: props.onUpdate,
+      topTenOwasp: _.map([
+        'A1:2017 - Injection',
+        'A2:2017 - Broken Authentication',
+        'A3:2017 - Sensitive Data Exposure',
+        'A4:2017 - XML External Entities (XXE)',
+        'A5:2017 - Broken Access Control',
+        'A6:2017 - Security Misconfiguration',
+        'A7:2017 - Cross-Site Scripting (XSS)',
+        'A8:2017 - Insecure Deserialization',
+        'A9:2017 - Using Components with Known Vulnerabilities',
+        'A10:2017 - Insufficient Logging &amp; Monitoring'
+      ], (v) => { return { key: v, value: v, text: v }; })
+    };
+  }
+
+  handleOpen = () => {
+    const { uuid } = this.state;
+    if (uuid) {
+      fetch('/api/template/' + uuid)
+        .then((response) => { 
+          if (response.status < 400) return response.json(); 
+          else throw new Error(); 
+        })
+        .then(({ status, data }) => this.setState({ 
+          loading: false, 
+          open: true, 
+          template: data
+        }))
+        .catch((error) => this.setState({ 
+          loading: false, 
+          open: true, 
+          error 
+        }));
+    } else {
+      this.setState({ 
+        loading: false, 
+        open: true 
+      });
+    }
+  }
+
+  handleClose = () => {
+    this.setState({ open: false });
+  }
+
+  handleChange = (e, {name, value}) => {
+    this.setState(prevState => ({
+      template: { ...prevState.template, [name]: value }
+    }));
+  }
+
+  handleSave = () => {
+    const { uuid, template, onUpdate } = this.state;
+    console.log(this.state.template);
+    this.setState({ open: false });
+
+    const options = {
+      method: uuid ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(template)
+    };
+
+    fetch(uuid ? '/api/template/' + uuid : '/api/template', options)
+      .then((response) => { 
+        if (response.status < 400) return response.json(); 
+        else throw new Error(); 
+      })
+      .then(({ status, data }) => onUpdate(data))
+      .catch((error) => this.setState({ 
+        open: false 
+      }));
+  }
+
+  render = () => {
+    const { error, open, loading, uuid, 
+      template, trigger, topTenOwasp } = this.state;
+
+    return (
+      <Modal closeIcon open={open}
+        onClose={this.handleClose}
+        onOpen={this.handleOpen}
+        trigger={trigger}
+      >
+        <Modal.Header>
+          <Icon name='file alternate outline' /> 
+          VulnDB &ndash; {uuid ? 'Edit template' : 'Add template'}
+        </Modal.Header>
+        <Modal.Content>
+          <Form size='small' loading={loading} error={error !== null} >
+            <Message error>
+              <Message.Header>Unable to load data</Message.Header>
+              The data could not be loaded, either because the template does 
+              not exist, or because the API is no longer available.
+            </Message>
+            <Form.Input 
+              name='title'
+              value={template.title} 
+              placeholder='Title' 
+              size='huge' 
+              onChange={this.handleChange} 
+              disabled={error !== null}
+            />
+            <Form.Group unstackable>
+              <Form.Dropdown 
+                name='owasp'
+                value={template.owasp} 
+                placeholder='OWASP Top 10' 
+                selection search 
+                options={topTenOwasp} 
+                width={14} 
+                onChange={this.handleChange} 
+                disabled={error !== null}
+              />
+              <Form.Radio 
+                label='FR' 
+                name='language' 
+                value='FR' 
+                checked={template.language === 'FR'} 
+                onChange={this.handleChange} 
+                disabled={error !== null}
+              />
+              <Form.Radio 
+                label='EN' 
+                name='language' 
+                value='EN' 
+                checked={template.language === 'EN'} 
+                onChange={this.handleChange} 
+                disabled={error !== null}
+              />
+            </Form.Group>
+            <Form.TextArea 
+              label='Description' 
+              name='description' 
+              value={template.description} 
+              rows={5} 
+              onChange={this.handleChange} 
+              disabled={error !== null}
+            />
+            <Form.TextArea 
+              label='Consequences' 
+              name='consequences' 
+              value={template.consequences} 
+              rows={5} 
+              onChange={this.handleChange} 
+              disabled={error !== null}
+            />
+            <Form.TextArea 
+              label='Recommendations' 
+              name='recommendations' 
+              value={template.recommendations} 
+              rows={5} 
+              onChange={this.handleChange} 
+              disabled={error !== null}
+            />
+            <Segment size='tiny' basic secondary textAlign='right'>
+              The text boxes for the "Description", "Consequences" and 
+              "Recommendation" paragraphs support Markdown syntax.
+            </Segment>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={this.handleClose}>Close</Button>
+          <Button primary 
+            disabled={loading || error !== null} 
+            onClick={this.handleSave}
+          >
+            <Icon name='save' /> Save
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    );
+  }
+}
+
+/*****************************************************************************
  * TplNavbar
  *****************************************************************************/
 
 const TplNavbar = (props) => {
-  const { data, onImport, onAdd } = props;
+  const { data, onImport, onUpdate } = props;
 
   return (
     <Menu pointing secondary inverted size='huge' className='navbar'>
@@ -286,9 +507,12 @@ const TplNavbar = (props) => {
             <Icon name='upload' />
           </Menu.Item>
           <TplMenuItemStatistics data={data} />
-          <Menu.Item onClick={onAdd}>
-            <Icon name='add square' />
-          </Menu.Item>
+          <TplItemModal
+            trigger={<Menu.Item>
+              <Icon name='add square' />
+            </Menu.Item>}
+            onUpdate={onUpdate}
+          />
         </Menu.Menu>
       </Container>
     </Menu>
@@ -296,12 +520,12 @@ const TplNavbar = (props) => {
 }
 
 /*****************************************************************************
- * TplMenuItemStatistics
+ * TplItemStatistics
  *****************************************************************************/
 
-const TplMenuItemStatistics = (props) => {
-  const { data } = props;
-  const [open, setOpen] = React.useState(false);
+const TplItemStatistics = (props) => {
+  const { data, trigger } = props;
+  const [ open, setOpen ] = React.useState(false);
 
   const dataChart = _.sortBy(_.reduce(data, (acc, tpl) => {
     if (! acc[tpl.owasp]) acc[tpl.owasp] = { name: tpl.owasp, total: 0 };
