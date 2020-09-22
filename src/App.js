@@ -114,6 +114,21 @@ class TplHomePage extends React.Component {
     }, this.handleMenuClick(tpl.uuid));
   }
 
+  handleDelete = (uuid) => {
+    const { data, lang } = this.state;
+    const newData = _.filter(data, (o) => o.uuid !== uuid);
+    this.setState({ 
+      loading: false, 
+      data: newData, 
+      total: newData.length, 
+      refs: _.reduce(newData, (refs, tpl) => {
+        refs[tpl.uuid] = React.createRef();
+        return refs;
+      }, {}),
+      templates: this.filter(newData, lang, '') 
+    }, this.props.history.push(`/home/${lang}`));
+  }
+
   filter = (data, lang, search) => {
     const match = (haystack, needle) => {
       return haystack && haystack.toUpperCase().match(needle.toUpperCase());
@@ -198,6 +213,7 @@ class TplHomePage extends React.Component {
                   refs={refs} 
                   search={search} 
                   onUpdate={this.handleUpdate}
+                  onDelete={this.handleDelete}
                 />
                 <TplFooter />
               </Grid.Column>
@@ -214,7 +230,7 @@ class TplHomePage extends React.Component {
  *****************************************************************************/
  
 const TplList = (props) => {
-  const { templates, refs, search, onUpdate } = props;
+  const { templates, refs, search, onUpdate, onDelete } = props;
 
   const TplListItem = ({ tpl }) => (
     <Ref innerRef={refs[tpl.uuid]}>
@@ -246,6 +262,7 @@ const TplList = (props) => {
             icon='edit outline' 
           />}
           onUpdate={onUpdate}
+          onDelete={onDelete}
         />
         <TplPermalink uuid={tpl.uuid} lang={tpl.language} />
         <Header.Subheader>
@@ -330,7 +347,8 @@ class TplItemModal extends React.Component {
       uuid: props.uuid || null,
       template: {},
       trigger: props.trigger,
-      onUpdate: props.onUpdate,
+      onUpdate: props.onUpdate || ((tpl) => {}),
+      onDelete: props.onDelete || ((uuid) => {}),
       topTenOwasp: _.map([
         'A1:2017 - Injection',
         'A2:2017 - Broken Authentication',
@@ -342,7 +360,9 @@ class TplItemModal extends React.Component {
         'A8:2017 - Insecure Deserialization',
         'A9:2017 - Using Components with Known Vulnerabilities',
         'A10:2017 - Insufficient Logging &amp; Monitoring'
-      ], (v) => { return { key: v, value: v, text: v }; })
+      ], (v) => { return { key: v, value: v, text: v }; }),
+      confirm: '',
+      confirmError: false
     };
   }
 
@@ -383,9 +403,14 @@ class TplItemModal extends React.Component {
     }));
   }
 
+  handleConfirm = (e, {value}) => {
+    this.setState({
+      confirm: value
+    });
+  }
+
   handleSave = () => {
     const { uuid, template, onUpdate } = this.state;
-    this.setState({ open: false });
 
     const options = {
       method: uuid ? 'PUT' : 'POST',
@@ -393,20 +418,42 @@ class TplItemModal extends React.Component {
       body: JSON.stringify(template)
     };
 
+    this.setState({ loading: true });
+
     fetch(uuid ? '/api/template/' + uuid : '/api/template', options)
       .then((response) => { 
         if (response.status < 400) return response.json(); 
         else throw new Error(); 
       })
       .then(({ status, data }) => onUpdate(data))
-      .catch((error) => this.setState({ 
-        open: false 
-      }));
+      .catch((error) => {})
+      .finally(() => this.setState({ open: false }));
+  }
+
+  handleDelete = () => {
+    const { confirm, uuid, onDelete } = this.state;
+
+    if ( confirm !== 'DELETE' ) {
+      return this.setState({ confirmError: true });
+    }
+
+    this.setState({ loading: true });
+
+    fetch('/api/template/' + uuid, { method: 'DELETE' })
+      .then((response) => { 
+        if (response.status < 400) return response.json(); 
+        else throw new Error(); 
+      })
+      .then(({ status }) => onDelete(uuid))
+      .catch((error) => {})
+      .finally(() => this.setState({ open: false }));
   }
 
   render = () => {
-    const { error, open, loading, uuid, 
+    const { error, open, loading, uuid, confirm, confirmError, 
       template, trigger, topTenOwasp } = this.state;
+
+    const freeze = loading || error !== null;
 
     return (
       <Modal closeIcon open={open}
@@ -492,12 +539,23 @@ class TplItemModal extends React.Component {
           </Form>
         </Modal.Content>
         <Modal.Actions>
+          { uuid ? (
+            <React.Fragment>
+              <Input 
+                value={confirm} 
+                placeholder='Type DELETE to confirm' 
+                onChange={this.handleConfirm} 
+                disabled={freeze} 
+                error={confirmError}
+              />
+              <Button color='red' disabled={freeze} onClick={this.handleDelete}>
+                <Icon name='trash' /> Delete
+              </Button>
+            </React.Fragment>
+          ) : '' }
           <Button onClick={this.handleClose}>Close</Button>
-          <Button primary 
-            disabled={loading || error !== null} 
-            onClick={this.handleSave}
-          >
-            <Icon name='save' /> Save
+          <Button primary disabled={freeze} onClick={this.handleSave}>
+            <Icon name='save' /> {uuid ? 'Save' : 'Create'}
           </Button>
         </Modal.Actions>
       </Modal>
