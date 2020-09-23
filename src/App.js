@@ -755,11 +755,9 @@ const TplSidebarMenu = (props) => {
           <Menu.Header>{menu.category}</Menu.Header>
           <Menu.Menu>
             { _.map(menu.templates, (tpl) => (
-              <Menu.Item
-                key={tpl.uuid}
-                name={tpl.title}
-                onClick={() => onClick(tpl.uuid)}
-              />
+              <Menu.Item key={tpl.uuid} onClick={() => onClick(tpl.uuid)}>
+                {tpl.title}
+              </Menu.Item>
             )) }
           </Menu.Menu>
         </Menu.Item>
