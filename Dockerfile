@@ -1,6 +1,4 @@
-<?php
-
-# Copyright (c) 2019 vonKrafft <contact@vonkrafft.fr>
+# Copyright (c) 2020 vonKrafft <contact@vonkrafft.fr>
 # 
 # This file is part of VulnDB.
 # 
@@ -13,9 +11,21 @@
 # This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-define('ABSPATH', dirname(__FILE__));
+FROM node:alpine
 
-require_once ABSPATH . '/API.inc.php';
+RUN mkdir -p /home/node/app/node_modules \
+    && chown -R node:node /home/node/app
 
-$api = new API(array_key_exists('PATH_INFO', $_SERVER) ? $_SERVER['PATH_INFO'] : $_SERVER['REQUEST_URI']);
-echo $api->process();
+USER node
+WORKDIR /home/node/app
+
+COPY --chown=node:node src ./src/
+COPY --chown=node:node public ./public/
+COPY --chown=node:node package*.json yarn.lock vulndb.js ./
+COPY --chown=node:node vulndb-sample.json vulndb.json
+
+RUN npm install && npm run build
+
+EXPOSE 5000
+
+CMD [ "node", "vulndb.js" ]

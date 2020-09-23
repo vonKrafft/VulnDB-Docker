@@ -1,0 +1,189 @@
+/*
+Copyright (c) 2020 vonKrafft <contact@vonkrafft.fr>
+
+This file is part of VulnDB.
+
+This file may be used under the terms of the GNU General Public License
+version 3.0 as published by the Free Software Foundation and appearing in
+the file LICENSE included in the packaging of this file. Please review the
+following information to ensure the GNU General Public License version 3.0
+requirements will be met: http://www.gnu.org/copyleft/gpl.html.
+
+This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+  'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+* {
+  border-radius: 0 !important;
+}
+
+.ui.container.wrapper {
+  padding-top: calc(48.5666px + 1em);
+  padding-bottom: 2em;
+}
+
+.ui.icon.input > i.disabled.icon {
+  display: none;
+}
+
+.ui.secondary.inverted.menu {
+  background-color: #032343;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2000;
+}
+
+.ui.secondary.pointing.menu .item {
+  padding: .75em .25em;
+}
+
+.ui.secondary.inverted.pointing.menu .header.item {
+  padding: .5em .25em;
+}
+
+.ui.modals.dimmer {
+  z-index: 3000;
+}
+
+.ui.vertical.menu {
+  width: 100%;
+  max-height: calc(100vh - 48.5666px - 38px - 3em);
+  overflow: auto;
+}
+
+.ui.vertical.menu .item > .header:not(.ui),
+.ui.vertical.menu .menu .item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui.vertical.menu .menu .item {
+  background: 0 0;
+  padding: .25em 1.33333333em;
+  color: rgba(0,0,0,.5);
+}
+
+.ui.dimmer .ui.loader {
+  top: 0;
+  margin: 5em 0;
+}
+
+.ui.header .sub.header {
+  float: right;
+  font-size: .7em;
+}
+
+.ui.segment {
+  margin-top: 0;
+}
+
+.ui.secondary.segment {
+  background-color: #c2d0de;
+}
+
+.ui.segment .ui.basic.label {
+  background-color: transparent;
+  padding: .2916em .833em;
+  color: rgba(0,0,0,.6);
+}
+
+.ui.segment a.ui.basic.label:hover {
+  color: inherit;
+  color: rgba(0,0,0,.6);
+  border-color: rgba(34,36,38,.15);
+  opacity: .7;
+}
+
+.ui.segment a.ui.empty.label > .icon {
+  margin-right: 0;
+}
+
+.ui.segment .paragraph {
+  text-align: justify;
+  margin: 1em 0 0 0;
+  padding: 0;
+}
+
+.ui.segment .paragraph p, 
+.ui.segment .paragraph ol, 
+.ui.segment .paragraph ul {
+  line-height: 1.5em;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ui.segment .paragraph ol, 
+.ui.segment .paragraph ul {
+  margin-bottom: 1em;
+}
+
+.ui.segment .paragraph li ol, 
+.ui.segment .paragraph li ul {
+  margin-bottom: 0;
+}
+
+.ui.segment .paragraph em {
+  color: #17a2b8;
+}
+
+.ui.segment .paragraph kbd {
+  background-color: #f6e692;
+  font-style: normal;
+  font-family: inherit;
+}
+
+.ui.segment .paragraph ul > li {
+  list-style: square;
+}
+
+.ui.segment .paragraph code {
+  font-size: 87.5%;
+  color: #e83e8c;
+  word-break: break-word;
+  line-height: .875em;
+}
+
+.ui.small.form .ui.radio.checkbox {
+  padding-top: 9.3166px;
+  padding-bottom: 9.3166px;
+  margin-left: .5em;
+  margin-right: .5em;
+}
+
+.ui.small.form .ui.secondary.segment {
+  color: rgba(0,0,0,.5);
+  background-color: transparent;
+  padding: 0;
+  font-size: .85em;
+}
+
+.ui.modal > .header {
+  background-color: #032343;
+  color: #e5f2ff;
+}
+
+.ui.primary.button, .ui.primary.buttons .button {
+  background-color: rgb(3, 35, 67);
+}
+
+.ui.primary.button:focus, .ui.primary.buttons .button:focus, 
+.ui.primary.button:hover, .ui.primary.buttons .button:hover {
+  background-color: rgba(3, 35, 67, .85);
+}
