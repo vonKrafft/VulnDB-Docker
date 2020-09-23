@@ -1,6 +1,6 @@
 # VulnDB Docker
 
-**VulnDB** is a simple PHP/JavaScript application to manage templates for pentest reports.
+**VulnDB** is a simple JavaScript application to manage templates for pentest reports. It runs with [NodeJS](https://nodejs.org/en/) and uses [ReactJS](https://reactjs.org/), [Express](http://expressjs.com/), [Lodash](https://lodash.com/), [Recharts](https://recharts.org/), and [SemanticUI](https://react.semantic-ui.com/) among others.
 
 ![Web interface of VulnDB](https://raw.githubusercontent.com/vonKrafft/VulnDB-Docker/master/preview.png)
 
@@ -22,26 +22,15 @@ You have to install `docker` and `docker-compose` (https://docs.docker.com/compo
 ```
 $ git clone https://github.com/vonKrafft/VulnDB-Docker
 $ cd VulnDB-Docker
-$ chmod a+rw vulndb/web/log/{access,error}.log vulndb/php/data/vulndb.json 
-$ docker-compose up -d
+$ docker-compose up -d --build
 ```
 
-## Dependencies
+You can also run **VulnDB** without Docker, provided you have _NodeJS_ installed:
 
-**Docker**
-
-- Nginx:stable-alpine - Docker Official Images (https://hub.docker.com/_/nginx)
-- PHP:fpm-alpine - Docker Official Images (https://hub.docker.com/_/php)
-
-**Web interface**
-
-- Backbone.js v1.4.0 (http://backbonejs.org)
-- Underscore.js v1.9.1 (http://underscorejs.org)
-- Bootstrap v4.3.1 (https://getbootstrap.com/)
-- Font Awesome Free v5.7.2 (https://fontawesome.com)
-- jQuery v3.3.1 (https://jquery.org/)
-- Popper v1.14.7 (https://popper.js.org/)
-- showdown v1.8.6 (https://github.com/showdownjs/showdown)
+```
+$ npm install && npm run build
+$ node vulndb.js
+```
 
 ## License
 
