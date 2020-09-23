@@ -419,7 +419,10 @@ class TplItemModal extends React.Component {
       })
       .then(({ status, data }) => reload(data.uuid))
       .catch((error) => {})
-      .finally(() => this.setState({ open: false }));
+      .finally(() => this.setState({ 
+        open: false, 
+        template: { language: 'FR' } 
+      }));
   }
 
   handleDelete = () => {
@@ -438,7 +441,10 @@ class TplItemModal extends React.Component {
       })
       .then(({ status }) => reload(uuid))
       .catch((error) => {})
-      .finally(() => this.setState({ open: false }));
+      .finally(() => this.setState({ 
+        open: false, 
+        template: { language: 'FR' } 
+      }));
   }
 
   render = () => {
