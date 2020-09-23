@@ -21,7 +21,7 @@ WORKDIR /home/node/app
 
 COPY --chown=node:node src ./src/
 COPY --chown=node:node public ./public/
-COPY --chown=node:node package*.json yarn.lock vulndb.js ./
+COPY --chown=node:node package*.json vulndb.js ./
 COPY --chown=node:node vulndb-sample.json vulndb.json
 
 RUN npm install && npm run build
